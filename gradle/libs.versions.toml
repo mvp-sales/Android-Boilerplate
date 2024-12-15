@@ -15,6 +15,10 @@ navigation = "2.8.5"
 navigation-plugin = "2.0.21"
 kotlin-serialization = "1.7.3"
 ksp = "2.0.21-1.0.27"
+compose-bom = "2024.12.01"
+compose-activity = "1.9.3"
+compose-viewmodels = "2.8.7"
+coil = "3.0.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,6 +41,18 @@ navigation-fragment = { group = "androidx.navigation", name = "navigation-fragme
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref="navigation" }
 navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref="navigation" }
 kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref="kotlin-serialization" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref="compose-bom" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref="compose-activity" }
+compose-viewmodels = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref="compose-viewmodels" }
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref="coil" }
+coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref="coil" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -45,3 +61,4 @@ navigation = { id = "plugin.serialization", version.ref = "navigation-plugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kapt = { id = "kotlin-kapt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
