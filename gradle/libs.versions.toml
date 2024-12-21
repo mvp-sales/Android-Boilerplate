@@ -19,6 +19,7 @@ compose-bom = "2024.12.01"
 compose-activity = "1.9.3"
 compose-viewmodels = "2.8.7"
 coil = "3.0.4"
+ktor-version = "3.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -53,6 +54,8 @@ compose-activity = { group = "androidx.activity", name = "activity-compose", ver
 compose-viewmodels = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref="compose-viewmodels" }
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref="coil" }
 coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref="coil" }
+ktor-core = { group = "io.ktor", name = "ktor-client-core", version.ref="ktor-version" }
+ktor-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref="ktor-version" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
