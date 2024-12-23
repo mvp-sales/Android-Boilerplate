@@ -55,6 +55,10 @@ compose-viewmodels = { group = "androidx.lifecycle", name = "lifecycle-viewmodel
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref="coil" }
 coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref="coil" }
 ktor-core = { group = "io.ktor", name = "ktor-client-core", version.ref="ktor-version" }
+ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref="ktor-version" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref="ktor-version" }
+ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref="ktor-version" }
+ktor-client-contentnegotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref="ktor-version" }
 ktor-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref="ktor-version" }
 
 [plugins]
