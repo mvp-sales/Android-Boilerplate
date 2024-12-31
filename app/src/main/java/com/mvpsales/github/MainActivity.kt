@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mvpsales.github.ui.newslist.NewsListScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,6 +37,7 @@ fun CenterText() {
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)) {
+        NewsListScreen()
         Text(
             modifier = Modifier.padding(32.dp)
                 .align(Alignment.Center),
