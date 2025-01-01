@@ -3,6 +3,8 @@ package com.mvpsales.github.di
 import com.mvpsales.github.api.NewsApi
 import com.mvpsales.github.api.NewsApiImpl
 import com.mvpsales.github.utils.Constants
+import com.mvpsales.github.utils.DispatcherHelper
+import com.mvpsales.github.utils.DispatcherHelperImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,4 +52,7 @@ object ApiModule {
 
     @Provides
     fun provideDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+    @Provides
+    fun provideDispatcherHelper(): DispatcherHelper = DispatcherHelperImpl()
 }

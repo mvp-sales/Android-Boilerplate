@@ -4,6 +4,7 @@ import com.mvpsales.github.api.response.ApiResult
 import com.mvpsales.github.api.response.ArticleNewsApiResponse
 import com.mvpsales.github.api.response.GenericErrorApiResponse
 import com.mvpsales.github.api.response.GetHeadlinesSourcesNewsApiResponse
+import com.mvpsales.github.api.response.GetNewsApiResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
@@ -17,7 +18,7 @@ class NewsApiImpl @Inject constructor(
     private val httpClient: HttpClient
 ): NewsApi {
 
-    override fun getEverything(page: Int): Flow<ApiResult<ArticleNewsApiResponse>> = flow {
+    override fun getEverything(page: Int): Flow<ApiResult<GetNewsApiResponse>> = flow {
         emit(ApiResult.Loading())
         try {
             emit(
@@ -42,7 +43,7 @@ class NewsApiImpl @Inject constructor(
         }
     }
 
-    override fun getTopHeadlines(page: Int): Flow<ApiResult<ArticleNewsApiResponse>> = flow {
+    override fun getTopHeadlines(page: Int): Flow<ApiResult<GetNewsApiResponse>> = flow {
         emit(ApiResult.Loading())
         try {
             emit(

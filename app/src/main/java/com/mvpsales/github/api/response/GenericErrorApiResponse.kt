@@ -4,5 +4,5 @@ package com.mvpsales.github.api.response
 data class GenericErrorApiResponse(
     val status: String,
     val code: String,
-    val message: String
-)
+    override val message: String
+) : Throwable(message)
