@@ -37,7 +37,7 @@ fun CenterText() {
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)) {
-        NewsListScreen()
+        //NewsListScreen()
         Text(
             modifier = Modifier.padding(32.dp)
                 .align(Alignment.Center),

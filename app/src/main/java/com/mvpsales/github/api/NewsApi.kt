@@ -1,7 +1,6 @@
 package com.mvpsales.github.api
 
 import com.mvpsales.github.api.response.ApiResult
-import com.mvpsales.github.api.response.ApiResult2
 import com.mvpsales.github.api.response.GetHeadlinesSourcesNewsApiResponse
 import com.mvpsales.github.api.response.GetNewsApiResponse
 import kotlinx.coroutines.flow.Flow
