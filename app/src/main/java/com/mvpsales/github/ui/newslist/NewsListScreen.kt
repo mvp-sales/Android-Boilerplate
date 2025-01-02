@@ -4,11 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -45,7 +43,7 @@ fun NewsListScreen(viewModel: NewsListViewModel) {
         is NewsListViewModel.UiState.Loaded -> {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(state.data.articles) { article ->
-                    NewsComponent(article)
+                    NewsContent(article)
                 }
             }
         }
@@ -67,7 +65,7 @@ fun NewsListScreen(viewModel: NewsListViewModel) {
 }
 
 @Composable
-fun NewsComponent(article: ArticleNewsApiResponse) {
+fun NewsContent(article: ArticleNewsApiResponse) {
     Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
         Row {
             AsyncImage(
@@ -107,7 +105,7 @@ fun NewsComponent(article: ArticleNewsApiResponse) {
             horizontalArrangement = Arrangement.Start
         ) {
             Text(
-                article.author,
+                article.author ?: "Unknown author",
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.labelSmall
             )
@@ -124,7 +122,7 @@ fun NewsComponent(article: ArticleNewsApiResponse) {
 @Preview(showBackground = true, device = "id:pixel_4")
 @Composable
 fun NewsComponentPreview() {
-    NewsComponent(
+    NewsContent(
         ArticleNewsApiResponse(
             author = "shrutishekar@gmail.com (Shruti Shekar)",
             title = "Android Central's Best of 2024: Apps and Services",

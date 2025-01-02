@@ -84,6 +84,8 @@ dependencies {
     debugImplementation(libs.compose.ui.test.manifest)
     implementation(libs.compose.activity)
     implementation(libs.compose.viewmodels)
+    implementation(libs.compose.navigation)
+    implementation(libs.hilt.navigation.compose)
     testImplementation(libs.room.testing)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -2,6 +2,8 @@ package com.mvpsales.github.di
 
 import com.mvpsales.github.api.NewsApi
 import com.mvpsales.github.api.NewsApiImpl
+import com.mvpsales.github.repository.NewsRepository
+import com.mvpsales.github.repository.NewsRepositoryImpl
 import com.mvpsales.github.utils.Constants
 import com.mvpsales.github.utils.DispatcherHelper
 import com.mvpsales.github.utils.DispatcherHelperImpl
@@ -49,6 +51,9 @@ object ApiModule {
 
     @Provides
     fun provideNewsApi(httpClient: HttpClient): NewsApi = NewsApiImpl(httpClient)
+
+    @Provides
+    fun provideRepository(api: NewsApi): NewsRepository = NewsRepositoryImpl(api)
 
     @Provides
     fun provideDispatcher(): CoroutineDispatcher = Dispatchers.Default

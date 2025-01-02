@@ -1,7 +1,6 @@
 package com.mvpsales.github.api
 
 import com.mvpsales.github.api.response.ApiResult
-import com.mvpsales.github.api.response.ArticleNewsApiResponse
 import com.mvpsales.github.api.response.GenericErrorApiResponse
 import com.mvpsales.github.api.response.GetHeadlinesSourcesNewsApiResponse
 import com.mvpsales.github.api.response.GetNewsApiResponse
@@ -23,7 +22,7 @@ class NewsApiImpl @Inject constructor(
         try {
             emit(
                 ApiResult.Success(
-                    httpClient.get("/v2/everything").body()
+                    httpClient.get("/v2/everything?q=soccer").body()
                 )
             )
         } catch (e: ClientRequestException) {

@@ -2,11 +2,11 @@ package com.mvpsales.github.api.response
 
 @kotlinx.serialization.Serializable
 data class ArticleNewsApiResponse(
-    val author: String,
+    val author: String?,
     val title: String,
     val description: String,
     val url: String,
-    val urlToImage: String,
+    val urlToImage: String?,
     val publishedAt: String,
     val content: String,
     val source: ArticleSourceNewsApiResponse
