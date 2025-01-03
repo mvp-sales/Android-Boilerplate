@@ -1,5 +1,6 @@
 package com.mvpsales.github.di
 
+import com.mvpsales.github.BuildConfig
 import com.mvpsales.github.api.NewsApi
 import com.mvpsales.github.api.NewsApiImpl
 import com.mvpsales.github.repository.NewsRepository
@@ -42,7 +43,7 @@ object ApiModule {
         install(DefaultRequest) {
             url(Constants.BASE_URL)
             header(HttpHeaders.ContentType, ContentType.Application.Json)
-            header("X-Api-Key", "13f3afa3f3d145aaa527a46166bd4246")
+            header("X-Api-Key", BuildConfig.API_KEY)
         }
         install(ContentNegotiation) {
             json()

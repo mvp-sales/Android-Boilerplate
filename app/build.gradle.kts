@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("kotlin-kapt")
     alias(libs.plugins.ksp)
@@ -13,6 +15,7 @@ android {
     compileSdk = 35
 
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 
@@ -28,6 +31,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        //load the values from .properties file
+        val keystoreFile = project.rootProject.file("secrets.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+
+        //return empty key in case something goes wrong
+        val apiKey = properties.getProperty("API_KEY") ?: ""
+        buildConfigField("String", "API_KEY", apiKey)
     }
 
     buildTypes {
