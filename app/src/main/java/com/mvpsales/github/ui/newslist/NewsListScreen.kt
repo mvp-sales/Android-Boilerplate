@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.BasicAlertDialog
@@ -31,6 +30,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.mvpsales.github.api.response.ArticleNewsApiResponse
 import com.mvpsales.github.api.response.ArticleSourceNewsApiResponse
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,11 +89,11 @@ fun NewsContent(article: ArticleNewsApiResponse) {
             modifier = Modifier.padding(top = 8.dp),
             style = MaterialTheme.typography.titleLarge
         )
-        Text(
+        /*Text(
             article.description,
             modifier = Modifier.padding(top = 4.dp),
             style = MaterialTheme.typography.labelSmall
-        )
+        )*/
         Row(
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
             horizontalArrangement = Arrangement.Start
@@ -103,13 +104,22 @@ fun NewsContent(article: ArticleNewsApiResponse) {
                 style = MaterialTheme.typography.labelSmall
             )
             Text(
-                article.publishedAt,
+                article.formatPublisheDate("dd MMM yyyy") ?: "",
                 modifier = Modifier.weight(1f).align(Alignment.CenterVertically),
                 textAlign = TextAlign.End,
                 style = MaterialTheme.typography.labelSmall
             )
         }
     }
+}
+
+private fun ArticleNewsApiResponse.formatPublisheDate(format: String): String? {
+    val dateFormatterFrom = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.US)
+    val date = dateFormatterFrom.parse(this.publishedAt)
+    date?.let { datenn ->
+        val dateFormatterTo = SimpleDateFormat("dd MMM yyyy", Locale.US)
+        return dateFormatterTo.format(datenn)
+    } ?: return null
 }
 
 @Preview(showBackground = true, device = "id:pixel_4")
