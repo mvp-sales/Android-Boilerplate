@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -67,39 +68,31 @@ fun NewsListScreen(viewModel: NewsListViewModel) {
 @Composable
 fun NewsContent(article: ArticleNewsApiResponse) {
     Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-        Row {
-            AsyncImage(
-                modifier = Modifier.width(96.dp),
-                model = article.urlToImage,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                placeholder = BrushPainter(
-                    Brush.linearGradient(
-                        listOf(
-                            Color(color = 0xFFFF0000),
-                            Color(color = 0xFFDDDDDD),
-                        )
+        AsyncImage(
+            modifier = Modifier.fillMaxWidth().height(160.dp),
+            model = article.urlToImage,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            placeholder = BrushPainter(
+                Brush.linearGradient(
+                    listOf(
+                        Color(color = 0xFFFF0000),
+                        Color(color = 0xFFDDDDDD),
                     )
                 )
             )
-            Column(modifier = Modifier.padding(start = 8.dp)) {
-                Text(
-                    article.title,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge
-                )
-                Text(
-                    article.description,
-                    style = MaterialTheme.typography.labelSmall
-                )
-                Text(
-                    article.content,
-                    modifier = Modifier.padding(top = 12.dp),
-                    textAlign = TextAlign.Justify,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-        }
+        )
+        Text(
+            article.title,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp),
+            style = MaterialTheme.typography.titleLarge
+        )
+        Text(
+            article.description,
+            modifier = Modifier.padding(top = 4.dp),
+            style = MaterialTheme.typography.labelSmall
+        )
         Row(
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
             horizontalArrangement = Arrangement.Start
