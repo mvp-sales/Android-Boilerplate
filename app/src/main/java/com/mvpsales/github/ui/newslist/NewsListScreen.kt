@@ -1,5 +1,6 @@
 package com.mvpsales.github.ui.newslist
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +36,10 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsListScreen(viewModel: NewsListViewModel) {
+fun NewsListScreen(
+    viewModel: NewsListViewModel,
+    onNavigateToNewsDetail: (ArticleNewsApiResponse) -> Unit
+) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     when(val state = uiState.value) {
@@ -45,7 +49,7 @@ fun NewsListScreen(viewModel: NewsListViewModel) {
         is NewsListViewModel.UiState.Loaded -> {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(state.data.articles) { article ->
-                    NewsContent(article)
+                    NewsContent(article, onNavigateToNewsDetail)
                 }
             }
         }
@@ -67,8 +71,15 @@ fun NewsListScreen(viewModel: NewsListViewModel) {
 }
 
 @Composable
-fun NewsContent(article: ArticleNewsApiResponse) {
-    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+fun NewsContent(
+    article: ArticleNewsApiResponse,
+    onNavigateToNewsDetail: (ArticleNewsApiResponse) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+            .padding(16.dp)
+            .clickable { onNavigateToNewsDetail(article) }
+    ) {
         AsyncImage(
             modifier = Modifier.fillMaxWidth().height(160.dp),
             model = article.urlToImage,
@@ -138,6 +149,7 @@ fun NewsComponentPreview() {
                 name = "Android Central",
                 id = null
             )
-        )
+        ),
+        onNavigateToNewsDetail = { _ -> }
     )
 }
