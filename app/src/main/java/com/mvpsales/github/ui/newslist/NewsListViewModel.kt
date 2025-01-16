@@ -22,8 +22,8 @@ class NewsListViewModel @Inject constructor(
     private val dispatcherHelper: DispatcherHelper
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Initial)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+    private val _uiState: MutableStateFlow<NewsListUiState> = MutableStateFlow(NewsListUiState.Initial)
+    val uiState: StateFlow<NewsListUiState> = _uiState.asStateFlow()
 
     fun getEverything() {
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
@@ -31,19 +31,34 @@ class NewsListViewModel @Inject constructor(
                 .collectLatest { result ->
                     _uiState.update {
                         when (result) {
-                            is ApiResult.Loading -> UiState.Loading
-                            is ApiResult.Success -> UiState.Loaded(result.data)
-                            is ApiResult.Error -> UiState.Error(result.error)
+                            is ApiResult.Loading -> NewsListUiState.Loading
+                            is ApiResult.Success -> NewsListUiState.Loaded(result.data)
+                            is ApiResult.Error -> NewsListUiState.Error(result.error)
                         }
                     }
                 }
         }
     }
 
-    sealed class UiState {
-        data object Initial : UiState()
-        data object Loading : UiState()
-        data class Loaded(val data: GetNewsApiResponse): UiState()
-        data class Error(val error: GenericErrorApiResponse): UiState()
+    fun getHeadlines() {
+        viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
+            newsRepository.getTopHeadlines(1)
+                .collectLatest { result ->
+                    _uiState.update {
+                        when (result) {
+                            is ApiResult.Loading -> NewsListUiState.Loading
+                            is ApiResult.Success -> NewsListUiState.Loaded(result.data)
+                            is ApiResult.Error -> NewsListUiState.Error(result.error)
+                        }
+                    }
+                }
+        }
+    }
+
+    sealed class NewsListUiState {
+        data object Initial : NewsListUiState()
+        data object Loading : NewsListUiState()
+        data class Loaded(val data: GetNewsApiResponse): NewsListUiState()
+        data class Error(val error: GenericErrorApiResponse): NewsListUiState()
     }
 }

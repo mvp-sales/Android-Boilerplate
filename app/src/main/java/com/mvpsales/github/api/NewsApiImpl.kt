@@ -47,7 +47,7 @@ class NewsApiImpl @Inject constructor(
         try {
             emit(
                 ApiResult.Success(
-                    httpClient.get("/v2/top-headlines").body()
+                    httpClient.get("/v2/top-headlines?q=movies").body()
                 )
             )
         } catch (e: ClientRequestException) {

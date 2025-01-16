@@ -2,6 +2,7 @@ package com.mvpsales.github
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -11,6 +12,7 @@ import androidx.navigation.toRoute
 import com.mvpsales.github.api.response.ArticleNewsApiResponse
 import com.mvpsales.github.ui.newsdetail.NewsDetailScreen
 import com.mvpsales.github.ui.newslist.NewsListScreen
+import com.mvpsales.github.ui.newstabs.NewsTabsScreen
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -19,14 +21,18 @@ import kotlinx.serialization.json.Json
 object NewsList
 
 @Serializable
+object NewsTabs
+
+@Serializable
 data class NewsDetail(val articleAsJsonString: String)
 
 @Composable
-fun AppNavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = NewsList) {
-        composable<NewsList> {
-            NewsListScreen(
-                viewModel = hiltViewModel(),
+fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
+    NavHost(navController = navController, startDestination = NewsTabs, modifier = modifier) {
+        composable<NewsTabs> {
+            NewsTabsScreen(
+                newsListViewModel = hiltViewModel(key = "latestKey"),
+                headlinesViewModel = hiltViewModel(key = "headlinesKey"),
                 onNavigateToNewsDetail = { article ->
                     val json = Json.encodeToString(article)
                     navController.navigate(route = NewsDetail(articleAsJsonString = json))

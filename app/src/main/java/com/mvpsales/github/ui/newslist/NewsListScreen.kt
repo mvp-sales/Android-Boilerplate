@@ -33,26 +33,34 @@ import com.mvpsales.github.api.response.ArticleNewsApiResponse
 import com.mvpsales.github.api.response.ArticleSourceNewsApiResponse
 import com.mvpsales.github.api.response.formatPublishedDate
 
+enum class NewsListType {
+    ALL_NEWS, HEADLINES
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsListScreen(
     viewModel: NewsListViewModel,
-    onNavigateToNewsDetail: (ArticleNewsApiResponse) -> Unit
+    onNavigateToNewsDetail: (ArticleNewsApiResponse) -> Unit,
+    listType: NewsListType
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     when(val state = uiState.value) {
-        is NewsListViewModel.UiState.Initial -> LaunchedEffect(true) {
-            viewModel.getEverything()
+        is NewsListViewModel.NewsListUiState.Initial -> LaunchedEffect(true) {
+            when (listType) {
+                NewsListType.ALL_NEWS -> viewModel.getEverything()
+                NewsListType.HEADLINES -> viewModel.getHeadlines()
+            }
         }
-        is NewsListViewModel.UiState.Loaded -> {
+        is NewsListViewModel.NewsListUiState.Loaded -> {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(state.data.articles) { article ->
                     NewsContent(article, onNavigateToNewsDetail)
                 }
             }
         }
-        is NewsListViewModel.UiState.Error -> {
+        is NewsListViewModel.NewsListUiState.Error -> {
             BasicAlertDialog(
                 onDismissRequest = {
                     viewModel.getEverything()
@@ -61,7 +69,7 @@ fun NewsListScreen(
                 Text(state.error.message)
             }
         }
-        is NewsListViewModel.UiState.Loading -> {
+        is NewsListViewModel.NewsListUiState.Loading -> {
             Box(modifier = Modifier.fillMaxSize()) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
