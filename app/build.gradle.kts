@@ -11,6 +11,10 @@ android {
     namespace = "com.mvpsales.github"
     compileSdk = 35
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.mvpsales.github"
         minSdk = 24
@@ -55,6 +59,7 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
     implementation(libs.room.paging)
+    implementation(libs.usercentrics)
     testImplementation(libs.room.testing)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

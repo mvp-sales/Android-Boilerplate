@@ -37,6 +37,7 @@ navigation-fragment = { group = "androidx.navigation", name = "navigation-fragme
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref="navigation" }
 navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref="navigation" }
 kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref="kotlin-serialization" }
+usercentrics = { group = "com.usercentrics.sdk", name = "usercentrics-ui" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

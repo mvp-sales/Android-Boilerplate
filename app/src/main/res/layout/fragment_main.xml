@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/consent_score_value_tv"
+        style="@style/TextAppearance.AppCompat.Display4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:layout_marginHorizontal="16dp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/show_consent_banner_btn"
+        tools:text="0"/>
+
+    <TextView
+        android:id="@+id/consent_score_label_tv"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:layout_marginHorizontal="16dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/consent_score_value_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Consent Score"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/show_consent_banner_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Show Consent Banner"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
