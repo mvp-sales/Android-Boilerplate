@@ -24,13 +24,12 @@
         style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="0"
+        android:text="Consent Score"
         android:layout_marginHorizontal="16dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/consent_score_value_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Consent Score"/>
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/show_consent_banner_btn"
