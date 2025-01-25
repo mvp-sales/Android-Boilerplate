@@ -4,17 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.mvpsales.github.databinding.FragmentMainBinding
-import com.usercentrics.sdk.Usercentrics
 import com.usercentrics.sdk.UsercentricsBanner
-import com.usercentrics.sdk.UsercentricsServiceConsent
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class MainFragment: Fragment() {
 
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: FragmentMainBinding
 
     override fun onCreateView(
@@ -31,31 +34,34 @@ class MainFragment: Fragment() {
 
         with(binding) {
             showConsentBannerBtn.setOnClickListener {
-                Usercentrics.isReady({ status ->
-                    if (status.shouldCollectConsent) {
-                        // Show banner to collect consent
-                        showConsentBanner()
-                    } else {
-                        // Apply consent with status.consents
+                viewModel.onShowConsentBanner()
+            }
+
+            viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+                when (uiState) {
+                    MainViewModel.UiState.Initial -> {}
+                    MainViewModel.UiState.ShowConsentBanner -> {
+                        val banner = UsercentricsBanner(requireActivity())
+                        banner.showFirstLayer { userResponse ->
+                            userResponse?.consents?.let { consents ->
+                                viewModel.applyConsents(consents)
+                            }
+                        }
                     }
-                }, { error ->
-                    // Handle non-localized error
-                    Snackbar.make(root, error.message ?: error.toString(), Snackbar.LENGTH_LONG).show()
-                })
+
+                    is MainViewModel.UiState.UsercentricsSdkError -> {
+                        Snackbar.make(
+                            root,
+                            uiState.error.message ?: uiState.error.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                    is MainViewModel.UiState.ShowConsentScore -> {
+                        consentScoreValueTv.text = "${uiState.consentScore.roundToInt()}"
+                    }
+                }
             }
         }
-    }
-
-    private fun showConsentBanner() {
-        val banner = UsercentricsBanner(requireActivity())
-        banner.showFirstLayer() { userResponse ->
-            userResponse?.consents?.let { consents ->
-                applyConsents(consents)
-            }
-        }
-    }
-
-    private fun applyConsents(consents: List<UsercentricsServiceConsent>) {
-
     }
 }
