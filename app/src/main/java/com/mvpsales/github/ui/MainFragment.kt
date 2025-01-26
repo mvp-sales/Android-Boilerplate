@@ -8,11 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
+import com.mvpsales.github.R
 import com.mvpsales.github.databinding.FragmentMainBinding
 import com.usercentrics.sdk.UsercentricsBanner
+import com.usercentrics.sdk.main.BuildConfig
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
-import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class MainFragment: Fragment() {
@@ -37,6 +37,10 @@ class MainFragment: Fragment() {
                 viewModel.onShowConsentBanner()
             }
 
+            resetConsentsBtn.setOnClickListener {
+                viewModel.onResetConsents()
+            }
+
             viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
                 when (uiState) {
                     MainViewModel.UiState.Initial -> {}
@@ -50,15 +54,24 @@ class MainFragment: Fragment() {
                     }
 
                     is MainViewModel.UiState.UsercentricsSdkError -> {
-                        Snackbar.make(
-                            root,
+                        Toast.makeText(
+                            requireContext(),
                             uiState.error.message ?: uiState.error.toString(),
                             Toast.LENGTH_LONG
                         ).show()
                     }
 
                     is MainViewModel.UiState.ShowConsentScore -> {
-                        consentScoreValueTv.text = "${uiState.consentScore.roundToInt()}"
+                        consentScoreValueTv.text = "${uiState.consentScore}"
+                    }
+
+                    MainViewModel.UiState.ConsentsReset -> {
+                        consentScoreValueTv.setText(R.string.consent_score_base_value)
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.consents_reset_toast,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }

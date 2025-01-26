@@ -11,7 +11,10 @@ class MainApplication: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val options = UsercentricsOptions(settingsId = "gChmbFIdL", defaultLanguage = "en")
+        val options = UsercentricsOptions(
+            settingsId = BuildConfig.usercentrics_sdk_settingsid,
+            defaultLanguage = "en"
+        )
         Usercentrics.initialize(this, options)
     }
 }

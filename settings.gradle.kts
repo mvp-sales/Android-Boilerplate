@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Android-Boilerplate"
+rootProject.name = "Usercentrics Challenge"
 include(":app")
  

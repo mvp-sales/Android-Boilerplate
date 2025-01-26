@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    kotlin("plugin.serialization") version "2.0.21"
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -12,6 +12,7 @@ android {
     compileSdk = 35
 
     buildFeatures {
+        buildConfig = true
         viewBinding = true
     }
 
@@ -35,11 +36,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -49,8 +50,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
-    implementation(libs.kotlin.serialization)
-    implementation(libs.retrofit)
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
     implementation(libs.hilt)
@@ -58,7 +57,6 @@ dependencies {
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
-    implementation(libs.room.paging)
     implementation(libs.usercentrics)
     testImplementation(libs.room.testing)
     testImplementation(libs.junit)

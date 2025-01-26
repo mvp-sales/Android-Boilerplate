@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Android-Boilerplate</string>
+    <string name="app_name">Usercentrics Challenge</string>
+    <string name="consent_score">Consent Score</string>
+    <string name="show_consent_banner">Show consent banner</string>
+    <string name="consent_score_base_value">0</string>
+    <string name="consents_reset_toast">"Consents reset successfully"</string>
 </resources>

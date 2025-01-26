@@ -10,7 +10,7 @@
         style="@style/TextAppearance.AppCompat.Display4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="0"
+        android:text="@string/consent_score_base_value"
         android:layout_marginHorizontal="16dp"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,7 +24,7 @@
         style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Consent Score"
+        android:text="@string/consent_score"
         android:layout_marginHorizontal="16dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/consent_score_value_tv"
@@ -32,10 +32,22 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/reset_consents_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Reset consents"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="8dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/show_consent_banner_btn"
+        />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/show_consent_banner_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Show Consent Banner"
+        android:text="@string/show_consent_banner"
         android:layout_marginHorizontal="32dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"

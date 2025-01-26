@@ -1,5 +1,6 @@
 package com.mvpsales.github.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,13 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-private val BANKING_SNOOPY_RULE_DATA_TYPES = listOf(
-    Constants.PURCHASE_ACTIVITY, Constants.BANK_DETAILS, Constants.CREDIT_DEBIT_CARD_NUMBER
-)
-
-private val WHY_DO_YOU_CARE_RULE_DATA_TYPES = listOf(
-    Constants.SEARCH_TERMS, Constants.GEOGRAPHIC_LOCATION, Constants.IP_ADDRESS
-)
+private const val USERCENTRICS_TAG = "USERCENTRICS_CHALLENGE"
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -36,64 +31,91 @@ class MainViewModel @Inject constructor(
     fun onShowConsentBanner() {
         Usercentrics.isReady({ status ->
             if (status.shouldCollectConsent) {
-                // Show banner to collect consent
                 _uiState.postValue(UiState.ShowConsentBanner)
             } else {
-                // Apply consent with status.consents
                 applyConsents(status.consents)
             }
         }, { error ->
-            // Handle non-localized error
             _uiState.postValue(UiState.UsercentricsSdkError(error))
         })
     }
 
     fun applyConsents(consents: List<UsercentricsServiceConsent>) {
-        val consentedServicesIds = consents.map { consent -> consent.templateId }
+        val consentedServicesIds = consents.filter { it.status }.map { consent -> consent.templateId }
         val cmpData = Usercentrics.instance.getCMPData()
         val services = cmpData.services.filter { consentedServicesIds.contains(it.templateId) }
         calculateConsentScore(services)
     }
 
     private fun calculateConsentScore(services: List<UsercentricsService>) {
-        var totalConsentScore: Double = 0.0
+        var totalConsentScore = 0.0
         viewModelScope.launch(Dispatchers.IO) {
+            Log.d(
+                USERCENTRICS_TAG,
+                """
+                    ############################################
+                    #                                          #
+                    #       USERCENTRICS SERVICES START        #  
+                    #                                          #
+                    ############################################
+                """.trimIndent()
+            )
             services.forEach { service ->
                 val dataTypes = dataTypesDao.getDataTypesFromConsent(service.dataCollectedList)
                 val serviceCost = applyCostRules(dataTypes)
-                println("${service.dataProcessor}: ${serviceCost.roundToInt()}")
+                Log.d(USERCENTRICS_TAG, "${service.dataProcessor}: ${serviceCost.roundToInt()}")
                 totalConsentScore += serviceCost
             }
-            _uiState.postValue(UiState.ShowConsentScore(totalConsentScore))
+            Log.d(
+                USERCENTRICS_TAG,
+                """
+                    ############################################
+                    #                                          #
+                    #       USERCENTRICS SERVICES END          #  
+                    #                                          #
+                    ############################################
+                """.trimIndent()
+            )
+            _uiState.postValue(UiState.ShowConsentScore(totalConsentScore.roundToInt()))
         }
     }
 
     private fun applyCostRules(dataTypes: List<UsercentricsDataType>): Double {
-        var serviceCost = dataTypes.sumOf { it.cost }.toDouble()
+        val baseServiceCost = dataTypes.sumOf { it.cost }.toDouble()
         val dataTypesCollected = dataTypes.map { it.dataTypeDescription }
+        var totalServiceCost = baseServiceCost
 
         // Rule 1: Banking snoopy
-        if (BANKING_SNOOPY_RULE_DATA_TYPES.all { it in dataTypesCollected }) {
-            serviceCost *= Constants.BANKING_SNOOPY_RULE_COST_FACTOR
+        if (Constants.BANKING_SNOOPY_RULE_DATA_TYPES.all { it in dataTypesCollected }) {
+            totalServiceCost += baseServiceCost * Constants.BANKING_SNOOPY_RULE_COST_FACTOR
         }
 
         // Rule 2: Why do you care?
-        if (WHY_DO_YOU_CARE_RULE_DATA_TYPES.all { it in dataTypesCollected }) {
-            serviceCost *= Constants.WHY_DO_YOU_CARE_RULE_COST_FACTOR
+        if (Constants.WHY_DO_YOU_CARE_RULE_DATA_TYPES.all { it in dataTypesCollected }) {
+            totalServiceCost += baseServiceCost * Constants.WHY_DO_YOU_CARE_RULE_COST_FACTOR
         }
 
         // Rule 3: The good citizen
         if (dataTypes.count() <= Constants.GOOD_CITIZEN_RULE_NUM_MAX_DATA_TYPES) {
-            serviceCost *= Constants.GOOD_CITIZEN_RULE_COST_FACTOR
+            totalServiceCost += baseServiceCost * Constants.GOOD_CITIZEN_RULE_COST_FACTOR
         }
 
-        return serviceCost
+        return totalServiceCost
+    }
+
+    fun onResetConsents() {
+        Usercentrics.instance.clearUserSession({ _ ->
+            _uiState.postValue(UiState.ConsentsReset)
+        }, { error ->
+            _uiState.postValue(UiState.UsercentricsSdkError(error))
+        })
     }
 
     sealed class UiState {
         data object Initial: UiState()
         data object ShowConsentBanner: UiState()
-        data class ShowConsentScore(val consentScore: Double): UiState()
+        data class ShowConsentScore(val consentScore: Int): UiState()
         data class UsercentricsSdkError(val error: UsercentricsError): UiState()
+        data object ConsentsReset: UiState()
     }
 }
