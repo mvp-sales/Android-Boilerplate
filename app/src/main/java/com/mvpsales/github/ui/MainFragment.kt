@@ -7,11 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.android.material.snackbar.Snackbar
 import com.mvpsales.github.R
 import com.mvpsales.github.databinding.FragmentMainBinding
 import com.usercentrics.sdk.UsercentricsBanner
-import com.usercentrics.sdk.main.BuildConfig
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
