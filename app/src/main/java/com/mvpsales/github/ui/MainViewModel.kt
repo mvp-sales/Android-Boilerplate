@@ -63,9 +63,10 @@ class MainViewModel @Inject constructor(
             services.forEach { service ->
                 val dataTypes = dataTypesDao.getDataTypesFromConsent(service.dataCollectedList)
                 val serviceCost = applyCostRules(dataTypes)
-                Log.d(USERCENTRICS_TAG, "${service.dataProcessor}: ${serviceCost.roundToInt()}")
+                Log.d(USERCENTRICS_TAG, "${service.dataProcessor} = ${serviceCost.roundToInt()}")
                 totalConsentScore += serviceCost
             }
+            Log.d(USERCENTRICS_TAG, "Total = ${totalConsentScore.roundToInt()}")
             Log.d(
                 USERCENTRICS_TAG,
                 """
