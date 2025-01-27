@@ -7,3 +7,5 @@ Create `local.properties` file in root directory if it doesn't exist. Add `userc
 ```
 usercentrics_sdk_settingsid={Usercentrics' settings id}
 ```
+
+In case of KSP or Hilt build issues, use the `Rebuild Project` option.
