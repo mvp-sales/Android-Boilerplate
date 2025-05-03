@@ -16,8 +16,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
 class NewsListViewModel @Inject constructor(
+    private val searchTerm: String,
     private val newsRepository: NewsRepository,
     private val dispatcherHelper: DispatcherHelper
 ) : ViewModel() {
@@ -25,9 +25,9 @@ class NewsListViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<NewsListUiState> = MutableStateFlow(NewsListUiState.Initial)
     val uiState: StateFlow<NewsListUiState> = _uiState.asStateFlow()
 
-    fun getEverything() {
+    fun getEverything(page: Int) {
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
-            newsRepository.getEverything(1)
+            newsRepository.getEverything(searchTerm, page)
                 .collectLatest { result ->
                     _uiState.update {
                         when (result) {
@@ -40,9 +40,9 @@ class NewsListViewModel @Inject constructor(
         }
     }
 
-    fun getHeadlines() {
+    fun getHeadlines(page: Int) {
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
-            newsRepository.getTopHeadlines(1)
+            newsRepository.getTopHeadlines(searchTerm, page)
                 .collectLatest { result ->
                     _uiState.update {
                         when (result) {

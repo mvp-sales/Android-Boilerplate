@@ -1,8 +1,8 @@
 [versions]
 agp = "8.7.3"
-desugar_jdk_libs = "2.1.4"
+desugar_jdk_libs = "2.1.5"
 kotlin = "2.0.21"
-coreKtx = "1.15.0"
+coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -10,18 +10,21 @@ appcompat = "1.7.0"
 material = "1.12.0"
 hilt = "2.51.1"
 hiltNavCompose = "1.2.0"
-room = "2.6.1"
-coroutines = "1.7.3"
+room = "2.7.1"
+coroutines = "1.9.0"
 retrofit = "2.10.0"
-navigation = "2.8.5"
+navigation = "2.8.9"
 navigation-plugin = "2.0.21"
 kotlin-serialization = "1.7.3"
 ksp = "2.0.21-1.0.27"
-compose-bom = "2024.12.01"
-compose-activity = "1.9.3"
+compose-bom = "2025.04.01"
+compose-activity = "1.10.1"
 compose-viewmodels = "2.8.7"
 coil = "3.0.4"
 ktor-version = "3.0.2"
+koin-bom = "x.x.x"
+koin-version = "4.0.3"
+koin-android-version = "x.x.x"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -65,6 +68,12 @@ ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version
 ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref="ktor-version" }
 ktor-client-contentnegotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref="ktor-version" }
 ktor-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref="ktor-version" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin-version" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-android-version" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-version" }
+koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation", version.ref = "koin-version" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

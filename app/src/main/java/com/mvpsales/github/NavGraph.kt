@@ -3,7 +3,6 @@ package com.mvpsales.github
 import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -11,28 +10,47 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.mvpsales.github.api.response.ArticleNewsApiResponse
 import com.mvpsales.github.ui.newsdetail.NewsDetailScreen
-import com.mvpsales.github.ui.newslist.NewsListScreen
+import com.mvpsales.github.ui.newssearch.NewsSearchScreen
 import com.mvpsales.github.ui.newstabs.NewsTabsScreen
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
+
+@Serializable
+object NewsSearch
 
 @Serializable
 object NewsList
 
 @Serializable
-object NewsTabs
+data class NewsTabs(val searchTerm: String)
 
 @Serializable
 data class NewsDetail(val articleAsJsonString: String)
 
 @Composable
 fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
-    NavHost(navController = navController, startDestination = NewsTabs, modifier = modifier) {
-        composable<NewsTabs> {
+    NavHost(navController = navController, startDestination = NewsSearch, modifier = modifier) {
+        composable<NewsSearch> {
+            NewsSearchScreen(
+                onNavigateToNewsList = { searchTerm ->
+                    navController.navigate(route = NewsTabs(searchTerm))
+                }
+            )
+        }
+        composable<NewsTabs> { backStackEntry ->
+            val route: NewsTabs = backStackEntry.toRoute()
             NewsTabsScreen(
-                newsListViewModel = hiltViewModel(key = "latestKey"),
-                headlinesViewModel = hiltViewModel(key = "headlinesKey"),
+                newsListViewModel = koinViewModel(
+                    parameters = { parametersOf(route.searchTerm) },
+                    key = "latestKey"
+                ),
+                headlinesViewModel = koinViewModel(
+                    parameters = { parametersOf(route.searchTerm) },
+                    key = "headlinesKey"
+                ),
                 onNavigateToNewsDetail = { article ->
                     val json = Json.encodeToString(article)
                     navController.navigate(route = NewsDetail(articleAsJsonString = json))

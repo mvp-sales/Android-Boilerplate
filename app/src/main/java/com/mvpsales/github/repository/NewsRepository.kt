@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
 
-    suspend fun getEverything(page: Int): Flow<ApiResult<GetNewsApiResponse>>
-    suspend fun getTopHeadlines(page: Int): Flow<ApiResult<GetNewsApiResponse>>
+    suspend fun getEverything(searchTerm: String, page: Int): Flow<ApiResult<GetNewsApiResponse>>
+    suspend fun getTopHeadlines(searchTerm: String, page: Int): Flow<ApiResult<GetNewsApiResponse>>
     suspend fun getHeadlinesSources(): Flow<ApiResult<GetHeadlinesSourcesNewsApiResponse>>
 }

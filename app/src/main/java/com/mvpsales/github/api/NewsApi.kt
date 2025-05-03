@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsApi {
 
-    fun getEverything(page: Int): Flow<ApiResult<GetNewsApiResponse>>
-    fun getTopHeadlines(page: Int): Flow<ApiResult<GetNewsApiResponse>>
+    fun getEverything(searchTerm: String, page: Int): Flow<ApiResult<GetNewsApiResponse>>
+    fun getTopHeadlines(searchTerm: String, page: Int): Flow<ApiResult<GetNewsApiResponse>>
     fun getHeadlinesSources(): Flow<ApiResult<GetHeadlinesSourcesNewsApiResponse>>
 }

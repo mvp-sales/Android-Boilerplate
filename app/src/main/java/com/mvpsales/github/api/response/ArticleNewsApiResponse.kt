@@ -14,11 +14,11 @@ import java.util.Locale
 data class ArticleNewsApiResponse(
     val author: String?,
     val title: String,
-    val description: String,
+    val description: String?,
     val url: String,
     val urlToImage: String?,
     val publishedAt: String,
-    val content: String,
+    val content: String?,
     val source: ArticleSourceNewsApiResponse
 ) : Parcelable
 

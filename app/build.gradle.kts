@@ -3,7 +3,6 @@ import java.util.Properties
 plugins {
     id("kotlin-kapt")
     alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     kotlin("plugin.serialization") version "2.0.21"
@@ -80,8 +79,11 @@ dependencies {
     implementation(libs.coil.network)
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
-    implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
+    //implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.navigation)
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)

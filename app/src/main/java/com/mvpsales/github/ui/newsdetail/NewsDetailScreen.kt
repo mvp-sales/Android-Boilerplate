@@ -54,7 +54,7 @@ fun NewsDetailScreen(article: ArticleNewsApiResponse) {
             style = MaterialTheme.typography.titleLarge
         )
         Text(
-            article.description,
+            article.description ?: "",
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .align(Alignment.CenterHorizontally),
@@ -62,7 +62,7 @@ fun NewsDetailScreen(article: ArticleNewsApiResponse) {
             style = MaterialTheme.typography.labelMedium
         )
         Text(
-            article.content,
+            article.content ?: "No content available",
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 16.dp)
                 .align(Alignment.CenterHorizontally),

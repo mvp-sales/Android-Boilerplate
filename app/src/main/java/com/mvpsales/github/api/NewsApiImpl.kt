@@ -17,12 +17,12 @@ class NewsApiImpl @Inject constructor(
     private val httpClient: HttpClient
 ): NewsApi {
 
-    override fun getEverything(page: Int): Flow<ApiResult<GetNewsApiResponse>> = flow {
+    override fun getEverything(searchTerm: String, page: Int): Flow<ApiResult<GetNewsApiResponse>> = flow {
         emit(ApiResult.Loading())
         try {
             emit(
                 ApiResult.Success(
-                    httpClient.get("/v2/everything?q=soccer").body()
+                    httpClient.get("/v2/everything?q=$searchTerm&pageSize=20&page=${page}").body()
                 )
             )
         } catch (e: ClientRequestException) {
@@ -42,12 +42,12 @@ class NewsApiImpl @Inject constructor(
         }
     }
 
-    override fun getTopHeadlines(page: Int): Flow<ApiResult<GetNewsApiResponse>> = flow {
+    override fun getTopHeadlines(searchTerm: String, page: Int): Flow<ApiResult<GetNewsApiResponse>> = flow {
         emit(ApiResult.Loading())
         try {
             emit(
                 ApiResult.Success(
-                    httpClient.get("/v2/top-headlines?q=movies").body()
+                    httpClient.get("/v2/top-headlines?q=$searchTerm&pageSize=20&page=${page}").body()
                 )
             )
         } catch (e: ClientRequestException) {

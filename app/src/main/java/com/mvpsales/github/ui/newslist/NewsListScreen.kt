@@ -11,15 +11,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BrushPainter
@@ -45,25 +52,52 @@ fun NewsListScreen(
     listType: NewsListType
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val lastLoadedPage = remember { mutableIntStateOf(1) }
 
     when(val state = uiState.value) {
         is NewsListViewModel.NewsListUiState.Initial -> LaunchedEffect(true) {
             when (listType) {
-                NewsListType.ALL_NEWS -> viewModel.getEverything()
-                NewsListType.HEADLINES -> viewModel.getHeadlines()
+                NewsListType.ALL_NEWS -> viewModel.getEverything(lastLoadedPage.intValue)
+                NewsListType.HEADLINES -> viewModel.getHeadlines(lastLoadedPage.intValue)
             }
         }
         is NewsListViewModel.NewsListUiState.Loaded -> {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(state.data.articles) { article ->
-                    NewsContent(article, onNavigateToNewsDetail)
+            Column {
+                LazyColumn(modifier = Modifier.weight(1f)) {
+                    items(state.data.articles) { article ->
+                        NewsContent(article, onNavigateToNewsDetail)
+                    }
+                }
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Button(
+                        modifier = Modifier.weight(1f)
+                            .clickable { lastLoadedPage.intValue > 1 }
+                            .alpha(
+                                if (lastLoadedPage.intValue > 1) 1f else 0f
+                            ),
+                        onClick = {
+                            lastLoadedPage.intValue -= 1
+                            viewModel.getEverything(lastLoadedPage.intValue)
+                        }
+                    ) {
+                        Text("Previous Page")
+                    }
+                    Button(
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            lastLoadedPage.intValue += 1
+                            viewModel.getEverything(lastLoadedPage.intValue)
+                        }
+                    ) {
+                        Text("Next Page")
+                    }
                 }
             }
         }
         is NewsListViewModel.NewsListUiState.Error -> {
             BasicAlertDialog(
                 onDismissRequest = {
-                    viewModel.getEverything()
+                    viewModel.getEverything(lastLoadedPage.intValue)
                 }
             ) {
                 Text(state.error.message)
