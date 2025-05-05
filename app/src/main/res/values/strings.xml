@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Android-Boilerplate</string>
+    <string name="news_search_appbar_title">News Search</string>
 </resources>

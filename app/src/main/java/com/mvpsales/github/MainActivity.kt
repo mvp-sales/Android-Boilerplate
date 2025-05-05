@@ -32,7 +32,10 @@ class MainActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            Scaffold(
+            Box(modifier = Modifier.fillMaxSize()) {
+                AppNavGraph(navController, modifier = Modifier.fillMaxSize())
+            }
+            /*Scaffold(
                 topBar = {
                     TopAppBar(
                         colors = topAppBarColors(
@@ -46,7 +49,7 @@ class MainActivity: AppCompatActivity() {
                 Box(modifier = Modifier.padding(padding).fillMaxSize()) {
                     AppNavGraph(navController, modifier = Modifier.fillMaxSize())
                 }
-            }
+            }*/
         }
     }
 }

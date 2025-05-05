@@ -43,6 +43,7 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
         composable<NewsTabs> { backStackEntry ->
             val route: NewsTabs = backStackEntry.toRoute()
             NewsTabsScreen(
+                searchTerm = route.searchTerm,
                 newsListViewModel = koinViewModel(
                     parameters = { parametersOf(route.searchTerm) },
                     key = "latestKey"
@@ -54,13 +55,19 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
                 onNavigateToNewsDetail = { article ->
                     val json = Json.encodeToString(article)
                     navController.navigate(route = NewsDetail(articleAsJsonString = json))
+                },
+                onNavigateBack = {
+                    navController.popBackStack()
                 }
             )
         }
         composable<NewsDetail> { backStackEntry ->
             val route: NewsDetail = backStackEntry.toRoute()
             val article: ArticleNewsApiResponse = Json.decodeFromString(route.articleAsJsonString)
-            NewsDetailScreen(article)
+            NewsDetailScreen(
+                article,
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
         /*composable(
             "details/{article}",

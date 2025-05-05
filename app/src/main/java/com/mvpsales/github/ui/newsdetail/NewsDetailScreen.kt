@@ -1,16 +1,22 @@
 package com.mvpsales.github.ui.newsdetail
 
-import android.content.Intent
-import android.net.Uri
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,7 +24,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BrushPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,70 +32,90 @@ import coil3.compose.AsyncImage
 import com.mvpsales.github.api.response.ArticleNewsApiResponse
 import com.mvpsales.github.api.response.ArticleSourceNewsApiResponse
 import com.mvpsales.github.api.response.formatPublishedDate
-import com.mvpsales.github.ui.newslist.NewsContent
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsDetailScreen(article: ArticleNewsApiResponse) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        AsyncImage(
-            modifier = Modifier.fillMaxWidth().height(208.dp),
-            model = article.urlToImage,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            placeholder = BrushPainter(
-                Brush.linearGradient(
-                    listOf(
-                        Color(color = 0xFFFF0000),
-                        Color(color = 0xFFDDDDDD),
+fun NewsDetailScreen(
+    article: ArticleNewsApiResponse,
+    onNavigateBack: () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                colors = topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = { Text("News from ${article.source.name}") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "backIcon")
+                    }
+                }
+            )
+        }
+    ) { padding ->
+        Column(modifier = Modifier.padding(padding).fillMaxSize()) {
+            AsyncImage(
+                modifier = Modifier.fillMaxWidth().height(208.dp),
+                model = article.urlToImage,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                placeholder = BrushPainter(
+                    Brush.linearGradient(
+                        listOf(
+                            Color(color = 0xFFFF0000),
+                            Color(color = 0xFFDDDDDD),
+                        )
                     )
                 )
             )
-        )
-        Text(
-            article.title,
-            modifier = Modifier.padding(all = 8.dp)
-                .align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge
-        )
-        Text(
-            article.description ?: "",
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.labelMedium
-        )
-        Text(
-            article.content ?: "No content available",
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 16.dp)
-                .align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Justify,
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Text(
-            article.author ?: "Unknown author",
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-            style = MaterialTheme.typography.labelMedium
-        )
-        Text(
-            "Published at ${article.formatPublishedDate("dd MMM yyyy")}",
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-            style = MaterialTheme.typography.labelMedium
-        )
-        val uriHandler = LocalUriHandler.current
-        Button(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
-            content = {
-                Text("Read more on ${article.source.name}")
-            },
-            onClick = {
-                uriHandler.openUri(article.url)
-            }
-        )
+            Text(
+                article.title,
+                modifier = Modifier.padding(all = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge
+            )
+            Text(
+                article.description ?: "",
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.labelMedium
+            )
+            Text(
+                article.content ?: "No content available",
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
+                    .align(Alignment.CenterHorizontally),
+                textAlign = TextAlign.Justify,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
+                article.author ?: "Unknown author",
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+                style = MaterialTheme.typography.labelMedium
+            )
+            Text(
+                "Published at ${article.formatPublishedDate("dd MMM yyyy")}",
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+                style = MaterialTheme.typography.labelMedium
+            )
+            val uriHandler = LocalUriHandler.current
+            Button(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
+                content = {
+                    Text("Read more on ${article.source.name}")
+                },
+                onClick = {
+                    uriHandler.openUri(article.url)
+                }
+            )
+        }
     }
 }
 
@@ -110,6 +135,7 @@ fun NewsDetailPreview() {
                 name = "Android Central",
                 id = null
             )
-        )
+        ),
+        onNavigateBack = {}
     )
 }

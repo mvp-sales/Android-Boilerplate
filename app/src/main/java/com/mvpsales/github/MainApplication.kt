@@ -1,6 +1,7 @@
 package com.mvpsales.github
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import com.mvpsales.github.di.appModule
 import dagger.hilt.android.HiltAndroidApp
 import org.koin.android.ext.koin.androidContext
@@ -11,6 +12,8 @@ import org.koin.core.context.startKoin
 class MainApplication: Application() {
     override fun onCreate() {
         super.onCreate()
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         startKoin {
             androidLogger()

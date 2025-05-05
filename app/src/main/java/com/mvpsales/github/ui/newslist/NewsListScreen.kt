@@ -67,29 +67,33 @@ fun NewsListScreen(
                     items(state.data.articles) { article ->
                         NewsContent(article, onNavigateToNewsDetail)
                     }
-                }
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Button(
-                        modifier = Modifier.weight(1f)
-                            .clickable { lastLoadedPage.intValue > 1 }
-                            .alpha(
-                                if (lastLoadedPage.intValue > 1) 1f else 0f
-                            ),
-                        onClick = {
-                            lastLoadedPage.intValue -= 1
-                            viewModel.getEverything(lastLoadedPage.intValue)
+
+                    items(1) {
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Button(
+                                modifier = Modifier.padding(all = 8.dp)
+                                    .weight(1f)
+                                    .clickable { lastLoadedPage.intValue > 1 }
+                                    .alpha(
+                                        if (lastLoadedPage.intValue > 1) 1f else 0f
+                                    ),
+                                onClick = {
+                                    lastLoadedPage.intValue -= 1
+                                    viewModel.getEverything(lastLoadedPage.intValue)
+                                }
+                            ) {
+                                Text("Previous Page")
+                            }
+                            Button(
+                                modifier = Modifier.padding(all = 8.dp).weight(1f),
+                                onClick = {
+                                    lastLoadedPage.intValue += 1
+                                    viewModel.getEverything(lastLoadedPage.intValue)
+                                }
+                            ) {
+                                Text("Next Page")
+                            }
                         }
-                    ) {
-                        Text("Previous Page")
-                    }
-                    Button(
-                        modifier = Modifier.weight(1f),
-                        onClick = {
-                            lastLoadedPage.intValue += 1
-                            viewModel.getEverything(lastLoadedPage.intValue)
-                        }
-                    ) {
-                        Text("Next Page")
                     }
                 }
             }
