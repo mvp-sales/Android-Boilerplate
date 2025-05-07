@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class NewsListViewModel @Inject constructor(
+class NewsListViewModel(
     private val searchTerm: String,
     private val newsRepository: NewsRepository,
     private val dispatcherHelper: DispatcherHelper

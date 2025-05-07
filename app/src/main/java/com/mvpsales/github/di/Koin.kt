@@ -1,10 +1,15 @@
 package com.mvpsales.github.di
 
+import android.content.Context
+import androidx.room.Room
 import com.mvpsales.github.BuildConfig
 import com.mvpsales.github.api.NewsApi
 import com.mvpsales.github.api.NewsApiImpl
+import com.mvpsales.github.db.AppDatabase
+import com.mvpsales.github.db.ArticlesDao
 import com.mvpsales.github.repository.NewsRepository
 import com.mvpsales.github.repository.NewsRepositoryImpl
+import com.mvpsales.github.ui.newsdetail.NewsDetailViewModel
 import com.mvpsales.github.ui.newslist.NewsListViewModel
 import com.mvpsales.github.utils.Constants
 import com.mvpsales.github.utils.DispatcherHelper
@@ -19,10 +24,25 @@ import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
+fun provideRoomDatabase(context: Context): AppDatabase = Room.databaseBuilder(
+    context,
+    AppDatabase::class.java,
+    "news-db"
+).build()
+
+private fun provideUserDao(appDatabase: AppDatabase) = appDatabase.articlesDao()
+
 val appModule = module {
+    single<AppDatabase> {
+        provideRoomDatabase(androidContext())
+    }
+    single<ArticlesDao> {
+        provideUserDao(get())
+    }
     single {
         HttpClient(Android) {
             expectSuccess = true
@@ -41,6 +61,7 @@ val appModule = module {
     }
     single<DispatcherHelper> { DispatcherHelperImpl() }
     factory<NewsApi> { NewsApiImpl(get()) }
-    factory<NewsRepository> { NewsRepositoryImpl(get()) }
+    factory<NewsRepository> { NewsRepositoryImpl(get(), get()) }
     viewModel { (searchTerm: String) -> NewsListViewModel(searchTerm, get(), get()) }
+    viewModel { NewsDetailViewModel(get(), get()) }
 }

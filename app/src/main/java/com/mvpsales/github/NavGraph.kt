@@ -66,6 +66,7 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
             val article: ArticleNewsApiResponse = Json.decodeFromString(route.articleAsJsonString)
             NewsDetailScreen(
                 article,
+                viewModel = koinViewModel(),
                 onNavigateBack = { navController.popBackStack() }
             )
         }

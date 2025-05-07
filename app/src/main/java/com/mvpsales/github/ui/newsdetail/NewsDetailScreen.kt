@@ -1,5 +1,6 @@
 package com.mvpsales.github.ui.newsdetail
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,8 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -28,6 +30,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.mvpsales.github.api.response.ArticleNewsApiResponse
 import com.mvpsales.github.api.response.ArticleSourceNewsApiResponse
@@ -37,7 +40,40 @@ import com.mvpsales.github.api.response.formatPublishedDate
 @Composable
 fun NewsDetailScreen(
     article: ArticleNewsApiResponse,
+    viewModel: NewsDetailViewModel,
     onNavigateBack: () -> Unit
+) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+
+    when(val state = uiState.value) {
+        is NewsDetailViewModel.UiState.Initial -> LaunchedEffect(true) {
+            viewModel.getArticle(articleUrl = article.url)
+        }
+        is NewsDetailViewModel.UiState.Loading -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
+        }
+        is NewsDetailViewModel.UiState.Loaded -> {
+            NewsDetail(
+                article,
+                state.isArticleSaved,
+                onNavigateBack,
+                onSaveArticle = { viewModel.saveArticle(article) },
+                onDeleteArticle = { viewModel.deleteArticle(article.url) }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun NewsDetail(
+    article: ArticleNewsApiResponse,
+    isArticleSaved: Boolean,
+    onNavigateBack: () -> Unit,
+    onSaveArticle: () -> Unit,
+    onDeleteArticle: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -115,14 +151,25 @@ fun NewsDetailScreen(
                     uriHandler.openUri(article.url)
                 }
             )
+            Button(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                content = {
+                    Text(
+                        if (isArticleSaved) "Remove from saved" else "Save for later"
+                    )
+                },
+                onClick = {
+                    if (isArticleSaved) onDeleteArticle() else onSaveArticle()
+                }
+            )
         }
     }
 }
 
 @Preview(showBackground = true, device = "id:pixel_4")
 @Composable
-fun NewsDetailPreview() {
-    NewsDetailScreen(
+fun NewsDetailSavedArticlePreview() {
+    NewsDetail(
         ArticleNewsApiResponse(
             author = "shrutishekar@gmail.com (Shruti Shekar)",
             title = "Android Central's Best of 2024: Apps and Services",
@@ -136,6 +183,33 @@ fun NewsDetailPreview() {
                 id = null
             )
         ),
-        onNavigateBack = {}
+        isArticleSaved = true,
+        onNavigateBack = {},
+        onSaveArticle = {},
+        onDeleteArticle = {}
+    )
+}
+
+@Preview(showBackground = true, device = "id:pixel_4")
+@Composable
+fun NewsDetailNotSavedArticlePreview() {
+    NewsDetail(
+        ArticleNewsApiResponse(
+            author = "shrutishekar@gmail.com (Shruti Shekar)",
+            title = "Android Central's Best of 2024: Apps and Services",
+            description = "Here are all the winners for Best Apps and Services for 2024!",
+            url = "https://www.androidcentral.com/apps-software/android-central-best-of-2024-apps-services",
+            urlToImage = "https://cdn.mos.cms.futurecdn.net/kWGZ6wr2t9dDGdmZW7pLEP-1200-80.jpg",
+            publishedAt = "2025-01-01T13:00:00Z",
+            content = "There have been some stellar apps and services that were released this year and I can wholeheartedly agree with every single one of the winners on this list. \r\nI am a bit biased here, but I am a huge… [+4354 chars]",
+            source = ArticleSourceNewsApiResponse(
+                name = "Android Central",
+                id = null
+            )
+        ),
+        isArticleSaved = false,
+        onNavigateBack = {},
+        onSaveArticle = {},
+        onDeleteArticle = {}
     )
 }
