@@ -9,7 +9,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.mvpsales.github.api.response.ArticleNewsApiResponse
+import com.mvpsales.github.entities.ArticleNews
 import com.mvpsales.github.ui.newsdetail.NewsDetailScreen
+import com.mvpsales.github.ui.newssaved.NewsSavedScreen
 import com.mvpsales.github.ui.newssearch.NewsSearchScreen
 import com.mvpsales.github.ui.newstabs.NewsTabsScreen
 import kotlinx.serialization.Serializable
@@ -30,6 +32,9 @@ data class NewsTabs(val searchTerm: String)
 @Serializable
 data class NewsDetail(val articleAsJsonString: String)
 
+@Serializable
+object NewsSaved
+
 @Composable
 fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
     NavHost(navController = navController, startDestination = NewsSearch, modifier = modifier) {
@@ -37,6 +42,21 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
             NewsSearchScreen(
                 onNavigateToNewsList = { searchTerm ->
                     navController.navigate(route = NewsTabs(searchTerm))
+                },
+                onNavigateToSavedNewsList = {
+                    navController.navigate(route = NewsSaved)
+                }
+            )
+        }
+        composable<NewsSaved> {
+            NewsSavedScreen(
+                viewModel = koinViewModel(),
+                onNavigateToNewsDetail = { article ->
+                    val json = Json.encodeToString(article)
+                    navController.navigate(route = NewsDetail(articleAsJsonString = json))
+                },
+                onNavigateBack = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -63,7 +83,7 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
         }
         composable<NewsDetail> { backStackEntry ->
             val route: NewsDetail = backStackEntry.toRoute()
-            val article: ArticleNewsApiResponse = Json.decodeFromString(route.articleAsJsonString)
+            val article: ArticleNews = Json.decodeFromString(route.articleAsJsonString)
             NewsDetailScreen(
                 article,
                 viewModel = koinViewModel(),

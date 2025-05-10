@@ -1,19 +1,16 @@
-package com.mvpsales.github.api.response
+package com.mvpsales.github.entities
 
 import android.os.Parcelable
-import com.mvpsales.github.entities.ArticleNews
-import com.mvpsales.github.entities.ArticleSource
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.time.Instant
-import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.Date
 import java.util.Locale
 
 @kotlinx.serialization.Serializable
 @Parcelize
-data class ArticleNewsApiResponse(
+data class ArticleNews(
     val author: String?,
     val title: String,
     val description: String?,
@@ -21,34 +18,20 @@ data class ArticleNewsApiResponse(
     val urlToImage: String?,
     val publishedAt: String,
     val content: String?,
-    val source: ArticleSourceNewsApiResponse
-) : Parcelable
+    val source: ArticleSource
+): Parcelable
 
 @kotlinx.serialization.Serializable
 @Parcelize
-data class ArticleSourceNewsApiResponse(
+data class ArticleSource(
     val id: String?,
     val name: String
-) : Parcelable
+): Parcelable
 
-fun ArticleNewsApiResponse.toEntity(): ArticleNews = ArticleNews(
-    this.author,
-    this.title,
-    this.description,
-    this.url,
-    this.urlToImage,
-    this.publishedAt,
-    this.content,
-    ArticleSource(
-        this.source.id,
-        this.source.name
-    )
-)
-
-fun ArticleNewsApiResponse.formatPublishedDate(format: String): String? {
+fun ArticleNews.formatPublishedDate(format: String): String? {
     val fixedDate = publishedAt.replace("+00:00", "Z");
     val instant = Instant.parse(fixedDate).truncatedTo(ChronoUnit.MILLIS)
     val date = Date.from(instant)
-    val dateFormatterTo = SimpleDateFormat("dd MMM yyyy", Locale.US)
+    val dateFormatterTo = SimpleDateFormat(format, Locale.US)
     return dateFormatterTo.format(date)
 }

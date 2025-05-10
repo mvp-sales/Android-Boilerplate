@@ -20,7 +20,7 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.mvpsales.github.api.response.ArticleNewsApiResponse
+import com.mvpsales.github.entities.ArticleNews
 import com.mvpsales.github.ui.newslist.NewsListScreen
 import com.mvpsales.github.ui.newslist.NewsListType
 import com.mvpsales.github.ui.newslist.NewsListViewModel
@@ -32,7 +32,7 @@ fun NewsTabsScreen(
     searchTerm: String,
     newsListViewModel: NewsListViewModel,
     headlinesViewModel: NewsListViewModel,
-    onNavigateToNewsDetail: (ArticleNewsApiResponse) -> Unit,
+    onNavigateToNewsDetail: (ArticleNews) -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val tabs = listOf("News", "Headlines")

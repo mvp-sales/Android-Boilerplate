@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +28,8 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsSearchScreen(
-    onNavigateToNewsList: (String) -> Unit
+    onNavigateToNewsList: (String) -> Unit,
+    onNavigateToSavedNewsList: () -> Unit
 ) {
     var searchTerm = remember { mutableStateOf(TextFieldValue("")) }
 
@@ -73,6 +75,13 @@ fun NewsSearchScreen(
                         Text("Search news")
                     }
                 )
+                Button(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    onClick = onNavigateToSavedNewsList,
+                    content = {
+                        Text("Saved news list")
+                    }
+                )
             }
         }
     }
@@ -81,5 +90,8 @@ fun NewsSearchScreen(
 @Preview
 @Composable
 fun NewsSearchScreenPreview() {
-    NewsSearchScreen {  }
+    NewsSearchScreen(
+        onNavigateToNewsList = { },
+        onNavigateToSavedNewsList = { }
+    )
 }

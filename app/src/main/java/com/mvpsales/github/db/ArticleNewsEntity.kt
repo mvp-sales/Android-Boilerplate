@@ -5,6 +5,9 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.mvpsales.github.api.response.ArticleNewsApiResponse
+import com.mvpsales.github.entities.ArticleNews
+import com.mvpsales.github.entities.ArticleSource
 
 @Entity(indices = [Index(value = ["url"], unique = true)])
 data class ArticleNewsEntity(
@@ -22,4 +25,32 @@ data class ArticleNewsEntity(
 data class ArticleSourceNews(
     @ColumnInfo(name = "source_id") val id: String?,
     @ColumnInfo(name = "source_name") val name: String
+)
+
+fun ArticleNewsEntity.toEntity(): ArticleNews = ArticleNews(
+    this.author,
+    this.title,
+    this.description,
+    this.url,
+    this.urlToImage,
+    this.publishedAt,
+    this.content,
+    ArticleSource(
+        this.source.id,
+        this.source.name
+    )
+)
+
+fun ArticleNews.toDb() = ArticleNewsEntity(
+    author = author,
+    title = title,
+    description = description,
+    url = url,
+    urlToImage = urlToImage,
+    publishedAt = publishedAt,
+    content = content,
+    source = ArticleSourceNews(
+        source.id,
+        source.name
+    )
 )

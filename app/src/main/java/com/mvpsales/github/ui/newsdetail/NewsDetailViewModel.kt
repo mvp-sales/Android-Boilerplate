@@ -2,9 +2,7 @@ package com.mvpsales.github.ui.newsdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvpsales.github.api.response.ArticleNewsApiResponse
-import com.mvpsales.github.db.ArticleNewsEntity
-import com.mvpsales.github.db.ArticleSourceNews
+import com.mvpsales.github.entities.ArticleNews
 import com.mvpsales.github.repository.NewsRepository
 import com.mvpsales.github.utils.DispatcherHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,10 +20,10 @@ class NewsDetailViewModel(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Initial)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    fun saveArticle(article: ArticleNewsApiResponse) {
+    fun saveArticle(article: ArticleNews) {
         _uiState.update { UiState.Loading }
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
-            newsRepository.saveArticle(article.toEntity())
+            newsRepository.saveArticle(article)
             _uiState.update { UiState.Loaded(true) }
         }
     }
@@ -53,17 +51,3 @@ class NewsDetailViewModel(
         data class Loaded(val isArticleSaved: Boolean): UiState()
     }
 }
-
-private fun ArticleNewsApiResponse.toEntity() = ArticleNewsEntity(
-    author = author,
-    title = title,
-    description = description,
-    url = url,
-    urlToImage = urlToImage,
-    publishedAt = publishedAt,
-    content = content,
-    source = ArticleSourceNews(
-        source.id,
-        source.name
-    )
-)

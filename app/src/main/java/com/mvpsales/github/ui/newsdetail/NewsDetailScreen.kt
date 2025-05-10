@@ -32,14 +32,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.mvpsales.github.api.response.ArticleNewsApiResponse
-import com.mvpsales.github.api.response.ArticleSourceNewsApiResponse
-import com.mvpsales.github.api.response.formatPublishedDate
+import com.mvpsales.github.entities.ArticleNews
+import com.mvpsales.github.entities.ArticleSource
+import com.mvpsales.github.entities.formatPublishedDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsDetailScreen(
-    article: ArticleNewsApiResponse,
+    article: ArticleNews,
     viewModel: NewsDetailViewModel,
     onNavigateBack: () -> Unit
 ) {
@@ -69,7 +69,7 @@ fun NewsDetailScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NewsDetail(
-    article: ArticleNewsApiResponse,
+    article: ArticleNews,
     isArticleSaved: Boolean,
     onNavigateBack: () -> Unit,
     onSaveArticle: () -> Unit,
@@ -170,7 +170,7 @@ private fun NewsDetail(
 @Composable
 fun NewsDetailSavedArticlePreview() {
     NewsDetail(
-        ArticleNewsApiResponse(
+        ArticleNews(
             author = "shrutishekar@gmail.com (Shruti Shekar)",
             title = "Android Central's Best of 2024: Apps and Services",
             description = "Here are all the winners for Best Apps and Services for 2024!",
@@ -178,7 +178,7 @@ fun NewsDetailSavedArticlePreview() {
             urlToImage = "https://cdn.mos.cms.futurecdn.net/kWGZ6wr2t9dDGdmZW7pLEP-1200-80.jpg",
             publishedAt = "2025-01-01T13:00:00Z",
             content = "There have been some stellar apps and services that were released this year and I can wholeheartedly agree with every single one of the winners on this list. \r\nI am a bit biased here, but I am a huge… [+4354 chars]",
-            source = ArticleSourceNewsApiResponse(
+            source = ArticleSource(
                 name = "Android Central",
                 id = null
             )
@@ -194,7 +194,7 @@ fun NewsDetailSavedArticlePreview() {
 @Composable
 fun NewsDetailNotSavedArticlePreview() {
     NewsDetail(
-        ArticleNewsApiResponse(
+        ArticleNews(
             author = "shrutishekar@gmail.com (Shruti Shekar)",
             title = "Android Central's Best of 2024: Apps and Services",
             description = "Here are all the winners for Best Apps and Services for 2024!",
@@ -202,7 +202,7 @@ fun NewsDetailNotSavedArticlePreview() {
             urlToImage = "https://cdn.mos.cms.futurecdn.net/kWGZ6wr2t9dDGdmZW7pLEP-1200-80.jpg",
             publishedAt = "2025-01-01T13:00:00Z",
             content = "There have been some stellar apps and services that were released this year and I can wholeheartedly agree with every single one of the winners on this list. \r\nI am a bit biased here, but I am a huge… [+4354 chars]",
-            source = ArticleSourceNewsApiResponse(
+            source = ArticleSource(
                 name = "Android Central",
                 id = null
             )

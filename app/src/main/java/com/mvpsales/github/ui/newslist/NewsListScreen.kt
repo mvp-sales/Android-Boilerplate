@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -20,9 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,9 +33,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.mvpsales.github.api.response.ArticleNewsApiResponse
-import com.mvpsales.github.api.response.ArticleSourceNewsApiResponse
-import com.mvpsales.github.api.response.formatPublishedDate
+import com.mvpsales.github.entities.ArticleNews
+import com.mvpsales.github.entities.ArticleSource
+import com.mvpsales.github.entities.formatPublishedDate
 
 enum class NewsListType {
     ALL_NEWS, HEADLINES
@@ -48,7 +45,7 @@ enum class NewsListType {
 @Composable
 fun NewsListScreen(
     viewModel: NewsListViewModel,
-    onNavigateToNewsDetail: (ArticleNewsApiResponse) -> Unit,
+    onNavigateToNewsDetail: (ArticleNews) -> Unit,
     listType: NewsListType
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -64,7 +61,7 @@ fun NewsListScreen(
         is NewsListViewModel.NewsListUiState.Loaded -> {
             Column {
                 LazyColumn(modifier = Modifier.weight(1f)) {
-                    items(state.data.articles) { article ->
+                    items(state.data) { article ->
                         NewsContent(article, onNavigateToNewsDetail)
                     }
 
@@ -117,8 +114,8 @@ fun NewsListScreen(
 
 @Composable
 fun NewsContent(
-    article: ArticleNewsApiResponse,
-    onNavigateToNewsDetail: (ArticleNewsApiResponse) -> Unit
+    article: ArticleNews,
+    onNavigateToNewsDetail: (ArticleNews) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -168,7 +165,7 @@ fun NewsContent(
 @Composable
 fun NewsComponentPreview() {
     NewsContent(
-        ArticleNewsApiResponse(
+        ArticleNews(
             author = "shrutishekar@gmail.com (Shruti Shekar)",
             title = "Android Central's Best of 2024: Apps and Services",
             description = "Here are all the winners for Best Apps and Services for 2024!",
@@ -176,7 +173,7 @@ fun NewsComponentPreview() {
             urlToImage = "https://cdn.mos.cms.futurecdn.net/kWGZ6wr2t9dDGdmZW7pLEP-1200-80.jpg",
             publishedAt = "2025-01-01T13:00:00Z",
             content = "There have been some stellar apps and services that were released this year and I can wholeheartedly agree with every single one of the winners on this list. \r\nI am a bit biased here, but I am a huge… [+4354 chars]",
-            source = ArticleSourceNewsApiResponse(
+            source = ArticleSource(
                 name = "Android Central",
                 id = null
             )
