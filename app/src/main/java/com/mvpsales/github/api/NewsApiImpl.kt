@@ -27,7 +27,7 @@ class NewsApiImpl @Inject constructor(
             )
         } catch (e: ClientRequestException) {
             emit(ApiResult.Error(e.response.body()))
-        } catch (e: ClientRequestException) {
+        } catch (e: ServerResponseException) {
             emit(ApiResult.Error(e.response.body()))
         } catch (e: Exception) {
             emit(
