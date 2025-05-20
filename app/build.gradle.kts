@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.kotlin.serialization)
     implementation(libs.retrofit)
+    implementation(libs.retrofit.kotlinx.serialization.converter)
     implementation(libs.ktor.core)
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.client.logging)
@@ -79,7 +80,6 @@ dependencies {
     implementation(libs.coil.network)
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
-    //implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
@@ -88,6 +88,7 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
     implementation(libs.room.paging)
+    implementation(libs.kotlin.result)
     val composeBom = platform(libs.compose.bom)
     implementation(composeBom)
     androidTestImplementation(composeBom)
@@ -108,6 +109,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.navigation.testing)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 }
 java {
     toolchain {

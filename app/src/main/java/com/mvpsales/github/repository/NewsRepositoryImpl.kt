@@ -1,19 +1,17 @@
 package com.mvpsales.github.repository
 
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
 import com.mvpsales.github.api.NewsApi
-import com.mvpsales.github.api.response.ApiResult
-import com.mvpsales.github.api.response.ArticleNewsApiResponse
-import com.mvpsales.github.api.response.GetNewsApiResponse
+import com.mvpsales.github.api.response.GenericErrorApiResponse
 import com.mvpsales.github.api.response.toEntity
-import com.mvpsales.github.db.ArticleNewsEntity
 import com.mvpsales.github.db.ArticlesDao
 import com.mvpsales.github.db.toDb
 import com.mvpsales.github.db.toEntity
 import com.mvpsales.github.entities.ArticleNews
-import com.mvpsales.github.ui.newslist.NewsListViewModel.NewsListUiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(
@@ -24,33 +22,49 @@ class NewsRepositoryImpl @Inject constructor(
     //private var allNews: List<ArticleNewsApiResponse> = emptyList()
     //private var topHeadlines: List<ArticleNewsApiResponse> = emptyList()
 
-    override suspend fun getEverything(searchTerm: String, page: Int): Flow<ApiResult<List<ArticleNews>>> =
-        newsApi.getEverything(searchTerm, page).map { result ->
-            when (result) {
-                is ApiResult.Success -> {
-                    ApiResult.Success(
-                        result.data.articles.map { it.toEntity() }
-                    )
-                }
-                is ApiResult.Error -> ApiResult.Error(result.error)
-                is ApiResult.Loading -> ApiResult.Loading()
+    override suspend fun getEverything(searchTerm: String, page: Int) = flow {
+        val response = newsApi.getEverything(searchTerm, page)
+        when {
+            response.isSuccessful ->
+                emit(Ok(response.body()!!.articles.map { it.toEntity() }))
+            else -> {
+                val errMsg = response.errorBody()?.string()?.let {
+                    val errMessage: GenericErrorApiResponse = Json.decodeFromString(it)
+                    return@let errMessage
+                } ?: GenericErrorApiResponse(status = "Err", code = "500", message = "Internal error")
+
+                emit(Err(errMsg))
             }
         }
+    }
 
-    override suspend fun getTopHeadlines(searchTerm: String, page: Int): Flow<ApiResult<List<ArticleNews>>> =
-        newsApi.getTopHeadlines(searchTerm, page).map { result ->
-            when (result) {
-                is ApiResult.Success -> {
-                    ApiResult.Success(
-                        result.data.articles.map { it.toEntity() }
-                    )
-                }
-                is ApiResult.Error -> ApiResult.Error(result.error)
-                is ApiResult.Loading -> ApiResult.Loading()
-            }
+    override suspend fun getTopHeadlines(searchTerm: String, page: Int) = flow {
+        val response = newsApi.getTopHeadlines(searchTerm, page)
+        if (response.isSuccessful) {
+            emit(Ok(response.body()!!.articles.map { it.toEntity() }))
+        } else {
+            val errMsg = response.errorBody()?.string()?.let {
+                val errMessage: GenericErrorApiResponse = Json.decodeFromString(it)
+                return@let errMessage
+            } ?: GenericErrorApiResponse(status = "Err", code = "500", message = "Internal error")
+
+            emit(Err(errMsg))
         }
+    }
 
-    override suspend fun getHeadlinesSources() = newsApi.getHeadlinesSources()
+    override suspend fun getHeadlinesSources() = flow {
+        val response = newsApi.getHeadlinesSources()
+        if (response.isSuccessful) {
+            emit(Ok(response.body()!!))
+        } else {
+            val errMsg = response.errorBody()?.string()?.let {
+                val errMessage: GenericErrorApiResponse = Json.decodeFromString(it)
+                return@let errMessage
+            } ?: GenericErrorApiResponse(status = "Err", code = "500", message = "Internal error")
+
+            emit(Err(errMsg))
+        }
+    }
 
     override suspend fun getSavedArticles(): Flow<List<ArticleNews>> = flow {
         emit(articlesDao.getAll().map { it.toEntity() })

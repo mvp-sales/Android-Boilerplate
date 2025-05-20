@@ -2,7 +2,6 @@ package com.mvpsales.github.ui.newslist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvpsales.github.api.response.ApiResult
 import com.mvpsales.github.api.response.GenericErrorApiResponse
 import com.mvpsales.github.api.response.GetNewsApiResponse
 import com.mvpsales.github.entities.ArticleNews
@@ -27,14 +26,14 @@ class NewsListViewModel(
     val uiState: StateFlow<NewsListUiState> = _uiState.asStateFlow()
 
     fun getEverything(page: Int) {
+        _uiState.update { NewsListUiState.Loading }
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
             newsRepository.getEverything(searchTerm, page)
                 .collectLatest { result ->
                     _uiState.update {
-                        when (result) {
-                            is ApiResult.Loading -> NewsListUiState.Loading
-                            is ApiResult.Success -> NewsListUiState.Loaded(result.data)
-                            is ApiResult.Error -> NewsListUiState.Error(result.error)
+                        when {
+                            result.isOk -> NewsListUiState.Loaded(result.value)
+                            else -> NewsListUiState.Error(result.error)
                         }
                     }
                 }
@@ -42,14 +41,14 @@ class NewsListViewModel(
     }
 
     fun getHeadlines(page: Int) {
+        _uiState.update { NewsListUiState.Loading }
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
             newsRepository.getTopHeadlines(searchTerm, page)
                 .collectLatest { result ->
                     _uiState.update {
-                        when (result) {
-                            is ApiResult.Loading -> NewsListUiState.Loading
-                            is ApiResult.Success -> NewsListUiState.Loaded(result.data)
-                            is ApiResult.Error -> NewsListUiState.Error(result.error)
+                        when {
+                            result.isOk -> NewsListUiState.Loaded(result.value)
+                            else -> NewsListUiState.Error(result.error)
                         }
                     }
                 }
