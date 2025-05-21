@@ -29,7 +29,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun NewsSearchScreen(
     onNavigateToNewsList: (String) -> Unit,
-    onNavigateToSavedNewsList: () -> Unit
+    onNavigateToSavedNewsList: () -> Unit,
+    onNavigateToSourcesList: () -> Unit
 ) {
     var searchTerm = remember { mutableStateOf(TextFieldValue("")) }
 
@@ -82,6 +83,13 @@ fun NewsSearchScreen(
                         Text("Saved news list")
                     }
                 )
+                Button(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    onClick = onNavigateToSourcesList,
+                    content = {
+                        Text("Show sources list")
+                    }
+                )
             }
         }
     }
@@ -92,6 +100,7 @@ fun NewsSearchScreen(
 fun NewsSearchScreenPreview() {
     NewsSearchScreen(
         onNavigateToNewsList = { },
-        onNavigateToSavedNewsList = { }
+        onNavigateToSavedNewsList = { },
+        onNavigateToSourcesList = { }
     )
 }

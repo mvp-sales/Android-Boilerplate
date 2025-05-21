@@ -14,9 +14,11 @@ import com.mvpsales.github.ui.newsdetail.NewsDetailScreen
 import com.mvpsales.github.ui.newssaved.NewsSavedScreen
 import com.mvpsales.github.ui.newssearch.NewsSearchScreen
 import com.mvpsales.github.ui.newstabs.NewsTabsScreen
+import com.mvpsales.github.ui.sourceslist.SourcesListScreen
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import okio.Source
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -35,6 +37,9 @@ data class NewsDetail(val articleAsJsonString: String)
 @Serializable
 object NewsSaved
 
+@Serializable
+object SourcesList
+
 @Composable
 fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
     NavHost(navController = navController, startDestination = NewsSearch, modifier = modifier) {
@@ -45,6 +50,9 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
                 },
                 onNavigateToSavedNewsList = {
                     navController.navigate(route = NewsSaved)
+                },
+                onNavigateToSourcesList = {
+                    navController.navigate(route = SourcesList)
                 }
             )
         }
@@ -86,6 +94,12 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
             val article: ArticleNews = Json.decodeFromString(route.articleAsJsonString)
             NewsDetailScreen(
                 article,
+                viewModel = koinViewModel(),
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+        composable<SourcesList> { backStackEntry ->
+            SourcesListScreen(
                 viewModel = koinViewModel(),
                 onNavigateBack = { navController.popBackStack() }
             )
