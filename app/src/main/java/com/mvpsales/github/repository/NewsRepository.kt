@@ -5,12 +5,15 @@ import com.mvpsales.github.api.response.GenericErrorApiResponse
 import com.mvpsales.github.api.response.GetHeadlinesSourcesNewsApiResponse
 import com.mvpsales.github.api.response.GetNewsApiResponse
 import com.mvpsales.github.entities.ArticleNews
+import com.mvpsales.github.entities.SearchNewsQuery
 import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
 
     suspend fun getEverything(searchTerm: String, page: Int): Flow<Result<List<ArticleNews>, GenericErrorApiResponse>>
+    suspend fun getEverything(searchNewsQuery: SearchNewsQuery): Flow<Result<List<ArticleNews>, GenericErrorApiResponse>>
     suspend fun getTopHeadlines(searchTerm: String, page: Int): Flow<Result<List<ArticleNews>, GenericErrorApiResponse>>
+    suspend fun getTopHeadlines(searchNewsQuery: SearchNewsQuery): Flow<Result<List<ArticleNews>, GenericErrorApiResponse>>
     suspend fun getHeadlinesSources(): Flow<Result<GetHeadlinesSourcesNewsApiResponse, GenericErrorApiResponse>>
     suspend fun getSavedArticles(): Flow<List<ArticleNews>>
     suspend fun saveArticle(article: ArticleNews)
