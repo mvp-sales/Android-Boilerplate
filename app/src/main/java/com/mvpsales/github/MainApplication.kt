@@ -2,7 +2,6 @@ package com.mvpsales.github
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.mvpsales.github.di.appModule
 import com.mvpsales.github.di.commonModule
 import com.mvpsales.github.di.dbModule
 import com.mvpsales.github.di.networkModule

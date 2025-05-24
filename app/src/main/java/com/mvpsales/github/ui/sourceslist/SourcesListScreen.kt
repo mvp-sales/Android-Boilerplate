@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvpsales.github.api.response.NewsSourceApiResponse
 import com.mvpsales.github.entities.NewsSource
+import com.mvpsales.github.entities.getLanguageCountryNames
 import com.mvpsales.github.ui.newssaved.NewsContent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,6 +96,7 @@ fun SourceContent(source: NewsSource) {
         Text(source.description)
         Text(source.url)
         Text(source.category)
-        Text("Country: ${source.country}/Language: ${source.language}")
+        val (language, country) = source.getLanguageCountryNames()
+        Text("${country}/Language: ${language}")
     }
 }

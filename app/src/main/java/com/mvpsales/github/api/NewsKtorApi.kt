@@ -54,7 +54,7 @@ class NewsKtorApiImpl(
         try {
             emit(
                 Ok(
-                    httpClient.get("/v2/top-headlines/sources&category=${request.category}").body()
+                    httpClient.get("/v2/top-headlines/sources?category=${request.category}").body()
                 )
             )
         } catch (e: ClientRequestException) {
