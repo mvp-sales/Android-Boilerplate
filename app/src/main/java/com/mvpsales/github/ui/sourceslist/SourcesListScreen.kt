@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvpsales.github.api.response.NewsSourceApiResponse
+import com.mvpsales.github.entities.NewsSource
 import com.mvpsales.github.ui.newssaved.NewsContent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,7 +86,7 @@ fun SourcesListScreen(
 }
 
 @Composable
-fun SourceContent(source: NewsSourceApiResponse) {
+fun SourceContent(source: NewsSource) {
     Column(
         modifier = Modifier.fillMaxWidth()
             .padding(16.dp)

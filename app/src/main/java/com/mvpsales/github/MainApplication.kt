@@ -3,6 +3,10 @@ package com.mvpsales.github
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.mvpsales.github.di.appModule
+import com.mvpsales.github.di.commonModule
+import com.mvpsales.github.di.dbModule
+import com.mvpsales.github.di.networkModule
+import com.mvpsales.github.di.uiModule
 import dagger.hilt.android.HiltAndroidApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -18,7 +22,7 @@ class MainApplication: Application() {
         startKoin {
             androidLogger()
             androidContext(this@MainApplication)
-            modules(appModule)
+            modules(commonModule, dbModule, networkModule, uiModule)
         }
     }
 }

@@ -2,8 +2,9 @@ package com.mvpsales.github.ui.sourceslist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvpsales.github.api.response.GenericErrorApiResponse
-import com.mvpsales.github.api.response.NewsSourceApiResponse
+import com.mvpsales.github.entities.GenericError
+import com.mvpsales.github.entities.NewsSource
+import com.mvpsales.github.entities.SearchSourcesQuery
 import com.mvpsales.github.repository.NewsRepository
 import com.mvpsales.github.utils.DispatcherHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,11 +25,11 @@ class SourcesListViewModel(
     fun getSources() {
         _uiState.update { UiState.Loading }
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
-            sourcesRepository.getHeadlinesSources()
+            sourcesRepository.getHeadlinesSources(query = SearchSourcesQuery(""))
                 .collectLatest { result ->
                     _uiState.update {
                         when {
-                            result.isOk -> UiState.Loaded(result.value.sources)
+                            result.isOk -> UiState.Loaded(result.value)
                             else -> UiState.Error(result.error)
                         }
                     }
@@ -39,7 +40,7 @@ class SourcesListViewModel(
     sealed class UiState {
         data object Initial: UiState()
         data object Loading: UiState()
-        data class Loaded(val sources: List<NewsSourceApiResponse>): UiState()
-        data class Error(val error: GenericErrorApiResponse): UiState()
+        data class Loaded(val sources: List<NewsSource>): UiState()
+        data class Error(val error: GenericError): UiState()
     }
 }
