@@ -39,7 +39,7 @@ android {
 
         //return empty key in case something goes wrong
         val apiKey = properties.getProperty("API_KEY") ?: ""
-        buildConfigField("String", "API_KEY", apiKey)
+        buildConfigField("String", "API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
