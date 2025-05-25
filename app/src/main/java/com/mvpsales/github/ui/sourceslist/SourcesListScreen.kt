@@ -44,6 +44,7 @@ import com.mvpsales.github.entities.getLanguageCountryNames
 @Composable
 fun SourcesListScreen(
     viewModel: SourcesListViewModel,
+    onNavigateToNewsList: (NewsSource) -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -80,7 +81,10 @@ fun SourcesListScreen(
                         contentPadding = PaddingValues(8.dp)
                     ) {
                         items(state.sources) { source ->
-                            SourceContent(source)
+                            SourceContent(
+                                source,
+                                onNavigateToNewsList
+                            )
                         }
                     }
                 }
@@ -99,9 +103,15 @@ fun SourcesListScreen(
 }
 
 @Composable
-fun SourceContent(source: NewsSource) {
+fun SourceContent(
+    source: NewsSource,
+    onNavigateToNewsList: (NewsSource) -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxWidth()
+            .clickable {
+                onNavigateToNewsList(source)
+            }
             .padding(8.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(Color.White)
@@ -160,6 +170,7 @@ fun SourceContentPreview() {
             category = "general",
             language = "en",
             country = "us"
-        )
+        ),
+        onNavigateToNewsList = {}
     )
 }

@@ -101,6 +101,7 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
         composable<SourcesList> { backStackEntry ->
             SourcesListScreen(
                 viewModel = koinViewModel(),
+                onNavigateToNewsList = {},
                 onNavigateBack = { navController.popBackStack() }
             )
         }
