@@ -20,6 +20,7 @@ import javax.inject.Inject
 
 class NewsListViewModel(
     private val searchTerm: String,
+    private val sourceId: String,
     private val newsRepository: NewsRepository,
     private val dispatcherHelper: DispatcherHelper
 ) : ViewModel() {
@@ -33,7 +34,7 @@ class NewsListViewModel(
             newsRepository.getEverything(
                 SearchNewsQuery(
                     searchTerm = searchTerm,
-                    sources = emptyList(),
+                    sources = listOf(sourceId),
                     page = page
                 )
             ).collectLatest { result ->
@@ -53,7 +54,7 @@ class NewsListViewModel(
             newsRepository.getTopHeadlines(
                 SearchNewsQuery(
                     searchTerm = searchTerm,
-                    sources = emptyList(),
+                    sources = listOf(sourceId),
                     page = page
                 )
             ).collectLatest { result ->

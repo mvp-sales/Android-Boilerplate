@@ -29,7 +29,7 @@ object NewsSearch
 object NewsList
 
 @Serializable
-data class NewsTabs(val searchTerm: String)
+data class NewsTabs(val searchTerm: String, val sourceId: String)
 
 @Serializable
 data class NewsDetail(val articleAsJsonString: String)
@@ -46,7 +46,7 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
         composable<NewsSearch> {
             NewsSearchScreen(
                 onNavigateToNewsList = { searchTerm ->
-                    navController.navigate(route = NewsTabs(searchTerm))
+                    navController.navigate(route = NewsTabs(searchTerm, ""))
                 },
                 onNavigateToSavedNewsList = {
                     navController.navigate(route = NewsSaved)
@@ -73,11 +73,11 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
             NewsTabsScreen(
                 searchTerm = route.searchTerm,
                 newsListViewModel = koinViewModel(
-                    parameters = { parametersOf(route.searchTerm) },
+                    parameters = { parametersOf(route.searchTerm, route.sourceId) },
                     key = "latestKey"
                 ),
                 headlinesViewModel = koinViewModel(
-                    parameters = { parametersOf(route.searchTerm) },
+                    parameters = { parametersOf(route.searchTerm, route.sourceId) },
                     key = "headlinesKey"
                 ),
                 onNavigateToNewsDetail = { article ->
@@ -101,7 +101,9 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
         composable<SourcesList> { backStackEntry ->
             SourcesListScreen(
                 viewModel = koinViewModel(),
-                onNavigateToNewsList = {},
+                onNavigateToNewsList = { source ->
+                    navController.navigate(route = NewsTabs("", source.id))
+                },
                 onNavigateBack = { navController.popBackStack() }
             )
         }
