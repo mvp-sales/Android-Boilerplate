@@ -11,6 +11,7 @@ import androidx.navigation.toRoute
 import com.mvpsales.github.api.response.ArticleNewsApiResponse
 import com.mvpsales.github.entities.ArticleNews
 import com.mvpsales.github.ui.newsdetail.NewsDetailScreen
+import com.mvpsales.github.ui.newslist.NewsResultsScreen
 import com.mvpsales.github.ui.newssaved.NewsSavedScreen
 import com.mvpsales.github.ui.newssearch.NewsSearchScreen
 import com.mvpsales.github.ui.newstabs.NewsTabsScreen
@@ -26,7 +27,7 @@ import org.koin.core.parameter.parametersOf
 object NewsSearch
 
 @Serializable
-object NewsList
+data class NewsList(val searchTerm: String, val sourceId: String)
 
 @Serializable
 data class NewsTabs(val searchTerm: String, val sourceId: String)
@@ -102,10 +103,25 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
             SourcesListScreen(
                 viewModel = koinViewModel(),
                 onNavigateToNewsList = { source ->
-                    navController.navigate(route = NewsTabs("", source.id))
+                    navController.navigate(route = NewsList("", source.id))
                 },
                 onNavigateBack = { navController.popBackStack() }
             )
+        }
+        composable<NewsList> { backStackEntry ->
+            val route: NewsList = backStackEntry.toRoute()
+            NewsResultsScreen(
+                viewModel = koinViewModel(
+                    parameters = { parametersOf(route.searchTerm, route.sourceId) },
+                    key = "latestKey"
+                ),
+                onNavigateToNewsDetail = { article ->
+                    val json = Json.encodeToString(article)
+                    navController.navigate(route = NewsDetail(articleAsJsonString = json))
+                },
+                onNavigateBack = { navController.popBackStack() }
+            )
+
         }
         /*composable(
             "details/{article}",

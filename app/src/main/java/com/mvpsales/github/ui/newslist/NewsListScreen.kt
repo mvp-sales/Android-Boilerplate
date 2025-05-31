@@ -11,16 +11,32 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -36,9 +52,67 @@ import coil3.compose.AsyncImage
 import com.mvpsales.github.entities.ArticleNews
 import com.mvpsales.github.entities.ArticleSource
 import com.mvpsales.github.entities.formatPublishedDate
+import kotlinx.coroutines.launch
 
 enum class NewsListType {
     ALL_NEWS, HEADLINES
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NewsResultsScreen(
+    viewModel: NewsListViewModel,
+    onNavigateToNewsDetail: (ArticleNews) -> Unit,
+    onNavigateBack: () -> Unit
+) {
+    var expandedMenu by remember { mutableStateOf(false) }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                colors = topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = { Text(" news results") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "backIcon")
+                    }
+                },
+                actions = {
+                    Box(
+                        modifier = Modifier
+                            .padding(16.dp)
+                    ) {
+                        IconButton(onClick = { expandedMenu = !expandedMenu }) {
+                            Icon(Icons.Default.MoreVert, contentDescription = "More options")
+                        }
+                        DropdownMenu(
+                            expanded = expandedMenu,
+                            onDismissRequest = { expandedMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Show headlines") },
+                                onClick = { /* Do something... */ }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Apply filters") },
+                                onClick = { /* Do something... */ }
+                            )
+                        }
+                    }
+                }
+            )
+        }
+    ) { padding ->
+        Box(modifier = Modifier.padding(padding)) {
+            NewsListScreen(
+                viewModel,
+                onNavigateToNewsDetail,
+                NewsListType.ALL_NEWS
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
