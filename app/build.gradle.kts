@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.coil.network)
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
+    testImplementation(libs.coroutines.testing)
     implementation(libs.koin.core)
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
@@ -105,11 +106,12 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     testImplementation(libs.room.testing)
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.navigation.testing)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 }
 java {
     toolchain {

@@ -27,6 +27,8 @@ koin-bom = "x.x.x"
 koin-version = "4.0.3"
 koin-android-version = "x.x.x"
 kotlin-result = "2.0.1"
+mockk = "1.14.2"
+turbine = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,6 +48,7 @@ room-testing = { group = "androidx.room", name="room-testing", version.ref="room
 room-paging = { group = "androidx.room", name="room-paging", version.ref="room" }
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref="coroutines" }
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref="coroutines" }
+coroutines-testing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref="coroutines" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref="retrofit" }
 retrofit-kotlinx-serialization-converter = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref="retrofit-kotlinx-serialization-converter"}
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref="navigation" }
@@ -77,6 +80,8 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-and
 koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-version" }
 koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation", version.ref = "koin-version" }
 kotlin-result = { group = "com.michael-bull.kotlin-result", name = "kotlin-result", version.ref="kotlin-result"}
+mockk = { group = "io.mockk", name = "mockk", version.ref="mockk" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref="turbine" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

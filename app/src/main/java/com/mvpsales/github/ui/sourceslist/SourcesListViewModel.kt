@@ -23,8 +23,8 @@ class SourcesListViewModel(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     fun getSources() {
-        _uiState.update { UiState.Loading }
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
+            _uiState.update { UiState.Loading }
             sourcesRepository.getHeadlinesSources(query = SearchSourcesQuery(""))
                 .collectLatest { result ->
                     _uiState.update {
