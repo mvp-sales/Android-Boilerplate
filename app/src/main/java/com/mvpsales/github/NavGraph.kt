@@ -14,12 +14,9 @@ import com.mvpsales.github.ui.newsdetail.NewsDetailScreen
 import com.mvpsales.github.ui.newslist.NewsResultsScreen
 import com.mvpsales.github.ui.newssaved.NewsSavedScreen
 import com.mvpsales.github.ui.newssearch.NewsSearchScreen
-import com.mvpsales.github.ui.newstabs.NewsTabsScreen
 import com.mvpsales.github.ui.sourceslist.SourcesListScreen
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import okio.Source
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -28,9 +25,6 @@ object NewsSearch
 
 @Serializable
 data class NewsList(val searchTerm: String, val sourceId: String)
-
-@Serializable
-data class NewsTabs(val searchTerm: String, val sourceId: String)
 
 @Serializable
 data class NewsDetail(val articleAsJsonString: String)
@@ -47,7 +41,7 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
         composable<NewsSearch> {
             NewsSearchScreen(
                 onNavigateToNewsList = { searchTerm ->
-                    navController.navigate(route = NewsTabs(searchTerm, ""))
+                    navController.navigate(route = NewsList(searchTerm, ""))
                 },
                 onNavigateToSavedNewsList = {
                     navController.navigate(route = NewsSaved)
@@ -60,27 +54,6 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
         composable<NewsSaved> {
             NewsSavedScreen(
                 viewModel = koinViewModel(),
-                onNavigateToNewsDetail = { article ->
-                    val json = Json.encodeToString(article)
-                    navController.navigate(route = NewsDetail(articleAsJsonString = json))
-                },
-                onNavigateBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
-        composable<NewsTabs> { backStackEntry ->
-            val route: NewsTabs = backStackEntry.toRoute()
-            NewsTabsScreen(
-                searchTerm = route.searchTerm,
-                newsListViewModel = koinViewModel(
-                    parameters = { parametersOf(route.searchTerm, route.sourceId) },
-                    key = "latestKey"
-                ),
-                headlinesViewModel = koinViewModel(
-                    parameters = { parametersOf(route.searchTerm, route.sourceId) },
-                    key = "headlinesKey"
-                ),
                 onNavigateToNewsDetail = { article ->
                     val json = Json.encodeToString(article)
                     navController.navigate(route = NewsDetail(articleAsJsonString = json))

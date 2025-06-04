@@ -28,39 +28,56 @@ class NewsListViewModel(
     private val _uiState: MutableStateFlow<NewsListUiState> = MutableStateFlow(NewsListUiState.Initial)
     val uiState: StateFlow<NewsListUiState> = _uiState.asStateFlow()
 
-    fun getEverything(page: Int) {
-        _uiState.update { NewsListUiState.Loading }
-        viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
-            newsRepository.getEverything(
-                SearchNewsQuery(
-                    searchTerm = searchTerm,
-                    sources = listOf(sourceId),
-                    page = page
-                )
-            ).collectLatest { result ->
-                _uiState.update {
-                    when {
-                        result.isOk -> NewsListUiState.Loaded(result.value)
-                        else -> NewsListUiState.Error(result.error)
-                    }
+    fun fetchNews(newsType: NewsListType) {
+        val currentState = _uiState.value
+        if (currentState is NewsListUiState.Loading || currentState is NewsListUiState.Loaded && currentState.isLoadingMore) {
+            return
+        }
+
+        _uiState.update { currentState ->
+            if (currentState is NewsListUiState.Loaded) {
+                if (currentState.newsType == newsType && currentState.lastLoadedPage > 0) {
+                    currentState.copy(isLoadingMore = true)
+                } else {
+                    NewsListUiState.Loading
                 }
+            } else {
+                NewsListUiState.Loading
             }
         }
-    }
 
-    fun getHeadlines(page: Int) {
-        _uiState.update { NewsListUiState.Loading }
+        val query = SearchNewsQuery(
+            searchTerm = searchTerm,
+            sources = listOf(sourceId),
+            page = (_uiState.value as? NewsListUiState.Loaded)?.lastLoadedPage ?: 1
+        )
+
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
-            newsRepository.getTopHeadlines(
-                SearchNewsQuery(
-                    searchTerm = searchTerm,
-                    sources = listOf(sourceId),
-                    page = page
-                )
-            ).collectLatest { result ->
-                _uiState.update {
+            val resultFlow = when (newsType) {
+                NewsListType.ALL_NEWS -> newsRepository.getEverything(query)
+                NewsListType.HEADLINES -> newsRepository.getTopHeadlines(query)
+            }
+
+            resultFlow.collectLatest { result ->
+                _uiState.update { currentState ->
                     when {
-                        result.isOk -> NewsListUiState.Loaded(result.value)
+                        result.isOk -> {
+                            if (currentState is NewsListUiState.Loaded) {
+                                currentState.copy(
+                                    data = currentState.data + result.value.articles,
+                                    lastLoadedPage = result.value.page,
+                                    isLoadingMore = false,
+                                    totalResultsCount = result.value.totalResults
+                                )
+                            } else {
+                                NewsListUiState.Loaded(
+                                    data = result.value.articles,
+                                    lastLoadedPage = 1,
+                                    totalResultsCount = result.value.totalResults,
+                                    newsType = newsType
+                                )
+                            }
+                        }
                         else -> NewsListUiState.Error(result.error)
                     }
                 }
@@ -71,7 +88,16 @@ class NewsListViewModel(
     sealed class NewsListUiState {
         data object Initial : NewsListUiState()
         data object Loading : NewsListUiState()
-        data class Loaded(val data: List<ArticleNews>): NewsListUiState()
+        data class Loaded(
+            val data: List<ArticleNews>,
+            val lastLoadedPage: Int = 0,
+            val isLoadingMore: Boolean = false,
+            val totalResultsCount: Int = 0,
+            val newsType: NewsListType = NewsListType.ALL_NEWS
+        ): NewsListUiState() {
+            val fetchedAllResults: Boolean
+                get() = data.size == totalResultsCount
+        }
         data class Error(val error: GenericError): NewsListUiState()
     }
 }

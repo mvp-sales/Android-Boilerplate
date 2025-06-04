@@ -14,6 +14,7 @@ import com.mvpsales.github.db.toDb
 import com.mvpsales.github.db.toEntity
 import com.mvpsales.github.entities.ArticleNews
 import com.mvpsales.github.entities.GenericError
+import com.mvpsales.github.entities.NewsPage
 import com.mvpsales.github.entities.SearchNewsQuery
 import com.mvpsales.github.entities.SearchSourcesQuery
 import com.mvpsales.github.entities.SearchType
@@ -58,7 +59,13 @@ class NewsRepositoryImpl @Inject constructor(
             )
         ).map { result ->
             result.mapEither(
-                success = { it.articles.map { it.toEntity() } },
+                success = {
+                    NewsPage(
+                        articles = it.articles.map { it.toEntity() },
+                        totalResults = it.totalResults,
+                        page = searchNewsQuery.page
+                    )
+                },
                 failure = { GenericError(it.message) }
             )
         }
@@ -87,7 +94,13 @@ class NewsRepositoryImpl @Inject constructor(
             )
         ).map { result ->
             result.mapEither(
-                success = { it.articles.map { it.toEntity() } },
+                success = {
+                    NewsPage(
+                        articles = it.articles.map { it.toEntity() },
+                        totalResults = it.totalResults,
+                        page = searchNewsQuery.page
+                    )
+                },
                 failure = { GenericError(it.message) }
             )
         }

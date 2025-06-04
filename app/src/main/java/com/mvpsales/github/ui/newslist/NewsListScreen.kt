@@ -49,6 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.mvpsales.github.NewsList
 import com.mvpsales.github.entities.ArticleNews
 import com.mvpsales.github.entities.ArticleSource
 import com.mvpsales.github.entities.formatPublishedDate
@@ -66,6 +67,8 @@ fun NewsResultsScreen(
     onNavigateBack: () -> Unit
 ) {
     var expandedMenu by remember { mutableStateOf(false) }
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    var newsLoadedType by remember { mutableStateOf(NewsListType.ALL_NEWS) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -92,8 +95,22 @@ fun NewsResultsScreen(
                             onDismissRequest = { expandedMenu = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text("Show headlines") },
-                                onClick = { /* Do something... */ }
+                                text = {
+                                    val menuItemTitle = if (newsLoadedType == NewsListType.ALL_NEWS) {
+                                        "Show headlines"
+                                    } else "Show all news"
+                                    Text(menuItemTitle)
+                                },
+                                onClick = {
+                                    if (newsLoadedType == NewsListType.ALL_NEWS) {
+                                        viewModel.fetchNews(NewsListType.HEADLINES)
+                                        newsLoadedType = NewsListType.HEADLINES
+                                    } else {
+                                        viewModel.fetchNews(NewsListType.ALL_NEWS)
+                                        newsLoadedType = NewsListType.ALL_NEWS
+                                    }
+                                    expandedMenu = false
+                                }
                             )
                             DropdownMenuItem(
                                 text = { Text("Apply filters") },
@@ -106,81 +123,48 @@ fun NewsResultsScreen(
         }
     ) { padding ->
         Box(modifier = Modifier.padding(padding)) {
-            NewsListScreen(
-                viewModel,
-                onNavigateToNewsDetail,
-                NewsListType.ALL_NEWS
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun NewsListScreen(
-    viewModel: NewsListViewModel,
-    onNavigateToNewsDetail: (ArticleNews) -> Unit,
-    listType: NewsListType
-) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val lastLoadedPage = remember { mutableIntStateOf(1) }
-
-    when(val state = uiState.value) {
-        is NewsListViewModel.NewsListUiState.Initial -> LaunchedEffect(true) {
-            when (listType) {
-                NewsListType.ALL_NEWS -> viewModel.getEverything(lastLoadedPage.intValue)
-                NewsListType.HEADLINES -> viewModel.getHeadlines(lastLoadedPage.intValue)
-            }
-        }
-        is NewsListViewModel.NewsListUiState.Loaded -> {
-            Column {
-                LazyColumn(modifier = Modifier.weight(1f)) {
-                    items(state.data) { article ->
-                        NewsContent(article, onNavigateToNewsDetail)
-                    }
-
-                    items(1) {
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            Button(
-                                modifier = Modifier.padding(all = 8.dp)
-                                    .weight(1f)
-                                    .clickable { lastLoadedPage.intValue > 1 }
-                                    .alpha(
-                                        if (lastLoadedPage.intValue > 1) 1f else 0f
-                                    ),
-                                onClick = {
-                                    lastLoadedPage.intValue -= 1
-                                    viewModel.getEverything(lastLoadedPage.intValue)
-                                }
-                            ) {
-                                Text("Previous Page")
+            when(val state = uiState.value) {
+                is NewsListViewModel.NewsListUiState.Initial -> LaunchedEffect(true) {
+                    viewModel.fetchNews(NewsListType.ALL_NEWS)
+                }
+                is NewsListViewModel.NewsListUiState.Loaded -> {
+                    Column {
+                        LazyColumn(modifier = Modifier.weight(1f)) {
+                            items(state.data) { article ->
+                                NewsContent(article, onNavigateToNewsDetail)
                             }
-                            Button(
-                                modifier = Modifier.padding(all = 8.dp).weight(1f),
-                                onClick = {
-                                    lastLoadedPage.intValue += 1
-                                    viewModel.getEverything(lastLoadedPage.intValue)
+
+                            items(1) {
+                                if (state.fetchedAllResults) {
+                                    Row(modifier = Modifier.fillMaxWidth()) {
+                                        Button(
+                                            modifier = Modifier.fillMaxWidth().padding(all = 8.dp),
+                                            onClick = {
+                                                viewModel.fetchNews(newsLoadedType)
+                                            }
+                                        ) {
+                                            Text("Load More")
+                                        }
+                                    }
                                 }
-                            ) {
-                                Text("Next Page")
                             }
                         }
                     }
                 }
-            }
-        }
-        is NewsListViewModel.NewsListUiState.Error -> {
-            BasicAlertDialog(
-                onDismissRequest = {
-                    viewModel.getEverything(lastLoadedPage.intValue)
+                is NewsListViewModel.NewsListUiState.Error -> {
+                    BasicAlertDialog(
+                        onDismissRequest = {
+                            viewModel.fetchNews(newsLoadedType)
+                        }
+                    ) {
+                        Text(state.error.message)
+                    }
                 }
-            ) {
-                Text(state.error.message)
-            }
-        }
-        is NewsListViewModel.NewsListUiState.Loading -> {
-            Box(modifier = Modifier.fillMaxSize()) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                is NewsListViewModel.NewsListUiState.Loading -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
+                }
             }
         }
     }
