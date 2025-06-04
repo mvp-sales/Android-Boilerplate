@@ -135,16 +135,14 @@ fun NewsResultsScreen(
                             }
 
                             items(1) {
-                                if (state.fetchedAllResults) {
-                                    Row(modifier = Modifier.fillMaxWidth()) {
-                                        Button(
-                                            modifier = Modifier.fillMaxWidth().padding(all = 8.dp),
-                                            onClick = {
-                                                viewModel.fetchNews(newsLoadedType)
-                                            }
-                                        ) {
-                                            Text("Load More")
+                                if (!state.fetchedAllResults) {
+                                    Button(
+                                        modifier = Modifier.fillMaxWidth().padding(all = 8.dp),
+                                        onClick = {
+                                            viewModel.fetchNews(newsLoadedType)
                                         }
+                                    ) {
+                                        Text("Load More")
                                     }
                                 }
                             }

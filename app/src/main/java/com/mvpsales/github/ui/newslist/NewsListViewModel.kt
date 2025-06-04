@@ -40,10 +40,11 @@ class NewsListViewModel(
             }
         }
 
+        val lastLoadedPage = (_uiState.value as? NewsListUiState.Loaded)?.lastLoadedPage ?: 0
         val query = SearchNewsQuery(
             searchTerm = searchTerm,
             sources = if (sourceId.isEmpty()) emptyList() else listOf(sourceId),
-            page = (_uiState.value as? NewsListUiState.Loaded)?.lastLoadedPage ?: 1
+            page = lastLoadedPage + 1
         )
 
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {

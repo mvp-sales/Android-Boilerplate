@@ -5,5 +5,5 @@ import com.mvpsales.github.repository.NewsRepositoryImpl
 import org.koin.dsl.module
 
 val commonModule = module {
-    factory<NewsRepository> { NewsRepositoryImpl(get(), get(), get()) }
+    factory<NewsRepository> { NewsRepositoryImpl(get(), get()) }
 }
