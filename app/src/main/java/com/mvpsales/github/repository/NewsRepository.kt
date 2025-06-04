@@ -14,11 +14,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
 
-    suspend fun getEverything(searchTerm: String, page: Int): Flow<Result<List<ArticleNews>, GenericErrorApiResponse>>
     suspend fun getEverything(searchNewsQuery: SearchNewsQuery): Flow<Result<NewsPage, GenericError>>
-    suspend fun getTopHeadlines(searchTerm: String, page: Int): Flow<Result<List<ArticleNews>, GenericErrorApiResponse>>
     suspend fun getTopHeadlines(searchNewsQuery: SearchNewsQuery): Flow<Result<NewsPage, GenericError>>
-    suspend fun getHeadlinesSources(): Flow<Result<GetHeadlinesSourcesNewsApiResponse, GenericErrorApiResponse>>
     suspend fun getHeadlinesSources(query: SearchSourcesQuery): Flow<Result<List<NewsSource>, GenericError>>
     suspend fun getSavedArticles(): Flow<List<ArticleNews>>
     suspend fun saveArticle(article: ArticleNews)

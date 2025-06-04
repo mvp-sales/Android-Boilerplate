@@ -2,21 +2,17 @@ package com.mvpsales.github.ui.newslist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvpsales.github.api.response.GenericErrorApiResponse
-import com.mvpsales.github.api.response.GetNewsApiResponse
 import com.mvpsales.github.entities.ArticleNews
 import com.mvpsales.github.entities.GenericError
 import com.mvpsales.github.entities.SearchNewsQuery
 import com.mvpsales.github.repository.NewsRepository
 import com.mvpsales.github.utils.DispatcherHelper
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class NewsListViewModel(
     private val searchTerm: String,
@@ -35,12 +31,10 @@ class NewsListViewModel(
         }
 
         _uiState.update { currentState ->
-            if (currentState is NewsListUiState.Loaded) {
-                if (currentState.newsType == newsType && currentState.lastLoadedPage > 0) {
-                    currentState.copy(isLoadingMore = true)
-                } else {
-                    NewsListUiState.Loading
-                }
+            if (currentState is NewsListUiState.Loaded &&
+                currentState.newsType == newsType && currentState.lastLoadedPage > 0) {
+
+                currentState.copy(isLoadingMore = true)
             } else {
                 NewsListUiState.Loading
             }
@@ -48,7 +42,7 @@ class NewsListViewModel(
 
         val query = SearchNewsQuery(
             searchTerm = searchTerm,
-            sources = listOf(sourceId),
+            sources = if (sourceId.isEmpty()) emptyList() else listOf(sourceId),
             page = (_uiState.value as? NewsListUiState.Loaded)?.lastLoadedPage ?: 1
         )
 
