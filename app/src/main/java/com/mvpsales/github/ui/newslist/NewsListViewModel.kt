@@ -21,26 +21,26 @@ class NewsListViewModel(
     private val dispatcherHelper: DispatcherHelper
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<NewsListUiState> = MutableStateFlow(NewsListUiState.Initial)
-    val uiState: StateFlow<NewsListUiState> = _uiState.asStateFlow()
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Initial)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     fun fetchNews(newsType: NewsListType) {
         val currentState = _uiState.value
-        if (currentState is NewsListUiState.Loading || currentState is NewsListUiState.Loaded && currentState.isLoadingMore) {
+        if (currentState is UiState.Loading || currentState is UiState.Loaded && currentState.isLoadingMore) {
             return
         }
 
         _uiState.update { currentState ->
-            if (currentState is NewsListUiState.Loaded &&
+            if (currentState is UiState.Loaded &&
                 currentState.newsType == newsType && currentState.lastLoadedPage > 0) {
 
                 currentState.copy(isLoadingMore = true)
             } else {
-                NewsListUiState.Loading
+                UiState.Loading
             }
         }
 
-        val lastLoadedPage = (_uiState.value as? NewsListUiState.Loaded)?.lastLoadedPage ?: 0
+        val lastLoadedPage = (_uiState.value as? UiState.Loaded)?.lastLoadedPage ?: 0
         val query = SearchNewsQuery(
             searchTerm = searchTerm,
             sources = if (sourceId.isEmpty()) emptyList() else listOf(sourceId),
@@ -57,7 +57,7 @@ class NewsListViewModel(
                 _uiState.update { currentState ->
                     when {
                         result.isOk -> {
-                            if (currentState is NewsListUiState.Loaded) {
+                            if (currentState is UiState.Loaded) {
                                 currentState.copy(
                                     data = currentState.data + result.value.articles,
                                     lastLoadedPage = result.value.page,
@@ -65,7 +65,7 @@ class NewsListViewModel(
                                     totalResultsCount = result.value.totalResults
                                 )
                             } else {
-                                NewsListUiState.Loaded(
+                                UiState.Loaded(
                                     data = result.value.articles,
                                     lastLoadedPage = 1,
                                     totalResultsCount = result.value.totalResults,
@@ -73,26 +73,26 @@ class NewsListViewModel(
                                 )
                             }
                         }
-                        else -> NewsListUiState.Error(result.error)
+                        else -> UiState.Error(result.error)
                     }
                 }
             }
         }
     }
 
-    sealed class NewsListUiState {
-        data object Initial : NewsListUiState()
-        data object Loading : NewsListUiState()
+    sealed class UiState {
+        data object Initial : UiState()
+        data object Loading : UiState()
         data class Loaded(
             val data: List<ArticleNews>,
             val lastLoadedPage: Int = 0,
             val isLoadingMore: Boolean = false,
             val totalResultsCount: Int = 0,
             val newsType: NewsListType = NewsListType.ALL_NEWS
-        ): NewsListUiState() {
+        ): UiState() {
             val fetchedAllResults: Boolean
                 get() = data.size == totalResultsCount
         }
-        data class Error(val error: GenericError): NewsListUiState()
+        data class Error(val error: GenericError): UiState()
     }
 }

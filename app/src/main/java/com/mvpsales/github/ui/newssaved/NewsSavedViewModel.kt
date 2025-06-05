@@ -17,28 +17,28 @@ class NewsSavedViewModel(
     private val dispatcherHelper: DispatcherHelper
 ): ViewModel() {
 
-    private val _uiState: MutableStateFlow<NewsSavedUiState> = MutableStateFlow(NewsSavedUiState.Initial)
-    val uiState: StateFlow<NewsSavedUiState> = _uiState.asStateFlow()
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Initial)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     fun getSavedNews() {
-        _uiState.update { NewsSavedUiState.Loading }
+        _uiState.update { UiState.Loading }
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
             newsRepository.getSavedArticles()
                 .collectLatest { result ->
-                    _uiState.update { NewsSavedUiState.Loaded(result) }
+                    _uiState.update { UiState.Loaded(result) }
                 }
         }
     }
 
     fun resetState() {
-        if (_uiState.value != NewsSavedUiState.Initial) {
-            _uiState.update { NewsSavedUiState.Initial }
+        if (_uiState.value != UiState.Initial) {
+            _uiState.update { UiState.Initial }
         }
     }
 
-    sealed class NewsSavedUiState {
-        data object Initial : NewsSavedUiState()
-        data object Loading : NewsSavedUiState()
-        data class Loaded(val data: List<ArticleNews>): NewsSavedUiState()
+    sealed class UiState {
+        data object Initial : UiState()
+        data object Loading : UiState()
+        data class Loaded(val data: List<ArticleNews>): UiState()
     }
 }

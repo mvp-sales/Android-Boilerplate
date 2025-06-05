@@ -53,10 +53,10 @@ fun NewsSavedScreen(
     }
 
     when(val state = uiState.value) {
-        is NewsSavedViewModel.NewsSavedUiState.Initial -> LaunchedEffect(true) {
+        is NewsSavedViewModel.UiState.Initial -> LaunchedEffect(true) {
             viewModel.getSavedNews()
         }
-        is NewsSavedViewModel.NewsSavedUiState.Loaded -> {
+        is NewsSavedViewModel.UiState.Loaded -> {
             Scaffold(
                 topBar = {
                     TopAppBar(
@@ -82,7 +82,7 @@ fun NewsSavedScreen(
                 }
             }
         }
-        is NewsSavedViewModel.NewsSavedUiState.Loading -> {
+        is NewsSavedViewModel.UiState.Loading -> {
             Box(modifier = Modifier.fillMaxSize()) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
