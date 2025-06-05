@@ -1,7 +1,9 @@
 package com.mvpsales.github.ui.sourceslist
 
 import app.cash.turbine.test
+import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
+import com.mvpsales.github.entities.GenericError
 import com.mvpsales.github.entities.NewsSource
 import com.mvpsales.github.repository.NewsRepository
 import com.mvpsales.github.utils.DispatcherHelper
@@ -60,14 +62,20 @@ class SourcesListViewModelTest {
 
     @Test
     fun `getSources emits Error on failure`() = runTest {
-        /*val error = GenericError(code = "500", message = "Server error")
-        coEvery { repository.getHeadlinesSources(any()) } returns flowOf(Result.failure(error))
+        val error = GenericError(message = "Internal server error")
+        coEvery { repository.getHeadlinesSources(any()) } returns flowOf(Err(error))
 
-        viewModel.getSources()
-        advanceUntilIdle()
+        viewModel.uiState.test {
+            assertEquals(SourcesListViewModel.UiState.Initial, awaitItem()) // assert initial state
 
-        val state = viewModel.uiState.value
-        assertTrue(state is SourcesListViewModel.UiState.Error)
-        assertEquals(error, (state as SourcesListViewModel.UiState.Error).error)*/
+            viewModel.getSources()
+
+            assertEquals(SourcesListViewModel.UiState.Loading, awaitItem())
+            val errorItem = awaitItem()
+            assertTrue(errorItem is SourcesListViewModel.UiState.Error)
+            assertEquals(error, (errorItem as SourcesListViewModel.UiState.Error).error)
+
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 }
