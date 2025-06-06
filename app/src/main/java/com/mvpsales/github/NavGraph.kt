@@ -11,7 +11,7 @@ import androidx.navigation.toRoute
 import com.mvpsales.github.api.response.ArticleNewsApiResponse
 import com.mvpsales.github.entities.ArticleNews
 import com.mvpsales.github.ui.newsdetail.NewsDetailScreen
-import com.mvpsales.github.ui.newslist.NewsResultsScreen
+import com.mvpsales.github.ui.newslist.NewsListScreen
 import com.mvpsales.github.ui.newssaved.NewsSavedScreen
 import com.mvpsales.github.ui.newssearch.NewsSearchScreen
 import com.mvpsales.github.ui.sourceslist.SourcesListScreen
@@ -83,7 +83,7 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
         }
         composable<NewsList> { backStackEntry ->
             val route: NewsList = backStackEntry.toRoute()
-            NewsResultsScreen(
+            NewsListScreen(
                 viewModel = koinViewModel(
                     parameters = { parametersOf(route.searchTerm, route.sourceId) },
                     key = "latestKey"

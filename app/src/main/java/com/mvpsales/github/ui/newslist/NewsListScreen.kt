@@ -54,7 +54,7 @@ enum class NewsListType {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsResultsScreen(
+fun NewsListScreen(
     viewModel: NewsListViewModel,
     onNavigateToNewsDetail: (ArticleNews) -> Unit,
     onNavigateBack: () -> Unit
