@@ -106,6 +106,9 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     testImplementation(libs.room.testing)
     testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter.params)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)
     androidTestImplementation(libs.androidx.junit)
@@ -121,4 +124,8 @@ java {
 
 kapt {
     correctErrorTypes = true
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

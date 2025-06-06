@@ -34,17 +34,7 @@ class SourcesListViewModelTest {
 
     @Test
     fun `getSources emits Loading and then Loaded`() = runTest {
-        val expectedSources = listOf(
-            NewsSource(
-                id = "abc-news",
-                name = "ABC News",
-                description = "Your trusted source for breaking news, analysis, exclusive interviews, headlines, and videos at ABCNews.com.",
-                url = "https://abcnews.go.com",
-                category = "general",
-                language = "en",
-                country = "us"
-            )
-        )
+        val expectedSources = listOf(mockk<NewsSource>())
         coEvery { repository.getHeadlinesSources(any()) } returns flowOf(Ok(expectedSources))
 
         viewModel.uiState.test {
@@ -62,7 +52,7 @@ class SourcesListViewModelTest {
 
     @Test
     fun `getSources emits Error on failure`() = runTest {
-        val error = GenericError(message = "Internal server error")
+        val error = mockk<GenericError>()
         coEvery { repository.getHeadlinesSources(any()) } returns flowOf(Err(error))
 
         viewModel.uiState.test {

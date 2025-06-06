@@ -2,7 +2,6 @@ package com.mvpsales.github.ui.newssaved
 
 import app.cash.turbine.test
 import com.mvpsales.github.entities.ArticleNews
-import com.mvpsales.github.entities.ArticleSource
 import com.mvpsales.github.repository.NewsRepository
 import com.mvpsales.github.utils.DispatcherHelper
 import io.mockk.coEvery
@@ -18,7 +17,7 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class NewsSavedViewModelTests {
+class NewsSavedViewModelTest {
     private lateinit var viewModel: NewsSavedViewModel
     private val testDispatcher = UnconfinedTestDispatcher()
     private val repository = mockk<NewsRepository>()
@@ -32,21 +31,7 @@ class NewsSavedViewModelTests {
 
     @Test
     fun `getSavedNews emits Loading and Loaded states`() = runTest {
-        val expected = listOf(
-            ArticleNews(
-                author = "shrutishekar@gmail.com (Shruti Shekar)",
-                title = "Android Central's Best of 2024: Apps and Services",
-                description = "Here are all the winners for Best Apps and Services for 2024!",
-                url = "https://www.androidcentral.com/apps-software/android-central-best-of-2024-apps-services",
-                urlToImage = "https://cdn.mos.cms.futurecdn.net/kWGZ6wr2t9dDGdmZW7pLEP-1200-80.jpg",
-                publishedAt = "2025-01-01T13:00:00Z",
-                content = "There have been some stellar apps and services that were released this year and I can wholeheartedly agree with every single one of the winners on this list. \r\nI am a bit biased here, but I am a huge… [+4354 chars]",
-                source = ArticleSource(
-                    name = "Android Central",
-                    id = null
-                )
-            )
-        )
+        val expected = listOf(mockk<ArticleNews>())
         coEvery { repository.getSavedArticles() } returns flowOf(expected)
 
         viewModel.uiState.test {

@@ -29,6 +29,7 @@ koin-android-version = "x.x.x"
 kotlin-result = "2.0.1"
 mockk = "1.14.2"
 turbine = "1.2.0"
+junit-jupiter = "5.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -82,6 +83,9 @@ koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navig
 kotlin-result = { group = "com.michael-bull.kotlin-result", name = "kotlin-result", version.ref="kotlin-result"}
 mockk = { group = "io.mockk", name = "mockk", version.ref="mockk" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref="turbine" }
+junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref= "junit-jupiter" }
+junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref= "junit-jupiter" }
+junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref= "junit-jupiter" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
