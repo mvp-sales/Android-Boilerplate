@@ -8,7 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.mvpsales.github.api.response.ArticleNewsApiResponse
+import com.mvpsales.github.api.response.ArticleNewsDto
 import com.mvpsales.github.entities.ArticleNews
 import com.mvpsales.github.ui.newsdetail.NewsDetailScreen
 import com.mvpsales.github.ui.newslist.NewsListScreen
@@ -110,13 +110,13 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
     }
 }
 
-class ArticleNewsParamType : NavType<ArticleNewsApiResponse>(isNullableAllowed = false) {
-    override fun get(bundle: Bundle, key: String): ArticleNewsApiResponse? =
+class ArticleNewsParamType : NavType<ArticleNewsDto>(isNullableAllowed = false) {
+    override fun get(bundle: Bundle, key: String): ArticleNewsDto? =
         bundle.getParcelable(key)
 
-    override fun parseValue(value: String): ArticleNewsApiResponse =
+    override fun parseValue(value: String): ArticleNewsDto =
         Json.decodeFromString(value)
 
-    override fun put(bundle: Bundle, key: String, value: ArticleNewsApiResponse) =
+    override fun put(bundle: Bundle, key: String, value: ArticleNewsDto) =
         bundle.putParcelable(key, value)
 }

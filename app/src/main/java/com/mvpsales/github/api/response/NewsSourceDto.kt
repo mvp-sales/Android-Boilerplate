@@ -3,7 +3,7 @@ package com.mvpsales.github.api.response
 import com.mvpsales.github.entities.NewsSource
 
 @kotlinx.serialization.Serializable
-data class NewsSourceApiResponse(
+data class NewsSourceDto(
     val id: String,
     val name: String,
     val description: String,
@@ -13,6 +13,6 @@ data class NewsSourceApiResponse(
     val country: String
 )
 
-fun NewsSourceApiResponse.toEntity() = NewsSource(
+fun NewsSourceDto.toEntity() = NewsSource(
     id, name, description, url, category, language, country
 )

@@ -5,7 +5,6 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.mvpsales.github.api.response.ArticleNewsApiResponse
 import com.mvpsales.github.entities.ArticleNews
 import com.mvpsales.github.entities.ArticleSource
 

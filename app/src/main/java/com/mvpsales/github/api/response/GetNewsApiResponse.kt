@@ -4,5 +4,5 @@ package com.mvpsales.github.api.response
 data class GetNewsApiResponse(
     val status: String,
     val totalResults: Int,
-    val articles: List<ArticleNewsApiResponse>
+    val articles: List<ArticleNewsDto>
 )
