@@ -1,8 +1,8 @@
 package com.mvpsales.github.api.response
 
 import android.os.Parcelable
-import com.mvpsales.github.entities.ArticleNews
-import com.mvpsales.github.entities.ArticleSource
+import com.mvpsales.github.domain.ArticleNews
+import com.mvpsales.github.domain.ArticleSource
 import kotlinx.parcelize.Parcelize
 
 @kotlinx.serialization.Serializable

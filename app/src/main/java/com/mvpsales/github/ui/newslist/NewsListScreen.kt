@@ -44,9 +44,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.mvpsales.github.entities.ArticleNews
-import com.mvpsales.github.entities.ArticleSource
-import com.mvpsales.github.entities.formatPublishedDate
+import com.mvpsales.github.domain.ArticleNews
+import com.mvpsales.github.domain.ArticleSource
+import com.mvpsales.github.domain.formatPublishedDate
 
 enum class NewsListType {
     ALL_NEWS, HEADLINES
@@ -129,13 +129,17 @@ fun NewsListScreen(
 
                             items(1) {
                                 if (!state.fetchedAllResults) {
-                                    Button(
-                                        modifier = Modifier.fillMaxWidth().padding(all = 8.dp),
-                                        onClick = {
-                                            viewModel.fetchNews(newsLoadedType)
+                                    if (state.isLoadingMore) {
+                                        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                                    } else {
+                                        Button(
+                                            modifier = Modifier.fillMaxWidth().padding(all = 8.dp),
+                                            onClick = {
+                                                viewModel.fetchNews(newsLoadedType)
+                                            }
+                                        ) {
+                                            Text("Load More")
                                         }
-                                    ) {
-                                        Text("Load More")
                                     }
                                 }
                             }

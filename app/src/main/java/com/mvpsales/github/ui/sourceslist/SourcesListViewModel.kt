@@ -2,10 +2,11 @@ package com.mvpsales.github.ui.sourceslist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvpsales.github.entities.GenericError
-import com.mvpsales.github.entities.NewsSource
-import com.mvpsales.github.entities.SearchSourcesQuery
+import com.mvpsales.github.domain.GenericError
+import com.mvpsales.github.domain.NewsSource
+import com.mvpsales.github.domain.SearchSourcesQuery
 import com.mvpsales.github.repository.NewsRepository
+import com.mvpsales.github.repository.SourcesRepository
 import com.mvpsales.github.utils.DispatcherHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SourcesListViewModel(
-    private val sourcesRepository: NewsRepository,
+    private val sourcesRepository: SourcesRepository,
     private val dispatcherHelper: DispatcherHelper
 ): ViewModel() {
 
@@ -34,6 +35,34 @@ class SourcesListViewModel(
                         }
                     }
                 }
+        }
+    }
+
+    fun addFavouriteSource(source: NewsSource) {
+        viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
+            val currentSources = (_uiState.value as UiState.Loaded).sources
+            _uiState.update { UiState.Loading }
+            sourcesRepository.addFavouriteSource(source)
+            _uiState.update {
+                val updatedSources = currentSources.map { sourceIt ->
+                    if (sourceIt.id == source.id) source.copy(favourite = true) else sourceIt
+                }
+                UiState.Loaded(updatedSources)
+            }
+        }
+    }
+
+    fun removeFavouriteSource(source: NewsSource) {
+        viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
+            val currentSources = (_uiState.value as UiState.Loaded).sources
+            _uiState.update { UiState.Loading }
+            sourcesRepository.removeSourceFromFavourite(source)
+            _uiState.update {
+                val updatedSources = currentSources.map { sourceIt ->
+                    if (sourceIt.id == source.id) source.copy(favourite = false) else sourceIt
+                }
+                UiState.Loaded(updatedSources)
+            }
         }
     }
 

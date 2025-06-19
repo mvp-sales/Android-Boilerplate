@@ -1,6 +1,6 @@
 package com.mvpsales.github.api.request
 
-import com.mvpsales.github.entities.SearchType
+import com.mvpsales.github.domain.SearchType
 
 data class GetNewsRequest(
     val searchType: SearchType,

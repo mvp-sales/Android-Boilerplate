@@ -36,8 +36,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.mvpsales.github.entities.ArticleNews
-import com.mvpsales.github.entities.formatPublishedDate
+import com.mvpsales.github.domain.ArticleNews
+import com.mvpsales.github.domain.formatPublishedDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

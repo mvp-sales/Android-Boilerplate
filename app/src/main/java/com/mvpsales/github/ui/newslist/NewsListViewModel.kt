@@ -2,9 +2,9 @@ package com.mvpsales.github.ui.newslist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvpsales.github.entities.ArticleNews
-import com.mvpsales.github.entities.GenericError
-import com.mvpsales.github.entities.SearchNewsQuery
+import com.mvpsales.github.domain.ArticleNews
+import com.mvpsales.github.domain.GenericError
+import com.mvpsales.github.domain.SearchNewsQuery
 import com.mvpsales.github.repository.NewsRepository
 import com.mvpsales.github.utils.DispatcherHelper
 import kotlinx.coroutines.flow.MutableStateFlow

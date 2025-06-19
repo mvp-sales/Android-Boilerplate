@@ -1,4 +1,4 @@
-package com.mvpsales.github.entities
+package com.mvpsales.github.domain
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -13,7 +13,8 @@ data class NewsSource(
     val url: String,
     val category: String,
     val language: String,
-    val country: String
+    val country: String,
+    val favourite: Boolean
 ): Parcelable
 
 fun NewsSource.getLanguageCountryNames(): Pair<String, String> {

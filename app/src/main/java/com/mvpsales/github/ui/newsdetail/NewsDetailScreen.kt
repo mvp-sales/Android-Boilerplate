@@ -32,9 +32,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.mvpsales.github.entities.ArticleNews
-import com.mvpsales.github.entities.ArticleSource
-import com.mvpsales.github.entities.formatPublishedDate
+import com.mvpsales.github.domain.ArticleNews
+import com.mvpsales.github.domain.ArticleSource
+import com.mvpsales.github.domain.formatPublishedDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

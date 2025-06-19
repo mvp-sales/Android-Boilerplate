@@ -3,9 +3,10 @@ package com.mvpsales.github.ui.sourceslist
 import app.cash.turbine.test
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
-import com.mvpsales.github.entities.GenericError
-import com.mvpsales.github.entities.NewsSource
+import com.mvpsales.github.domain.GenericError
+import com.mvpsales.github.domain.NewsSource
 import com.mvpsales.github.repository.NewsRepository
+import com.mvpsales.github.repository.SourcesRepository
 import com.mvpsales.github.utils.DispatcherHelper
 import io.mockk.coEvery
 import io.mockk.every
@@ -23,7 +24,7 @@ import org.junit.Test
 class SourcesListViewModelTest {
     private lateinit var viewModel: SourcesListViewModel
     private val testDispatcher = UnconfinedTestDispatcher()
-    private val repository = mockk<NewsRepository>()
+    private val repository = mockk<SourcesRepository>()
     private val dispatcherHelper = mockk<DispatcherHelper>()
 
     @Before

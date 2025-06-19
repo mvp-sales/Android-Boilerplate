@@ -1,4 +1,4 @@
-package com.mvpsales.github.entities
+package com.mvpsales.github.domain
 
 data class NewsPage(
     val articles: List<ArticleNews>,

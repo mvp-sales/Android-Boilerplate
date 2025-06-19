@@ -1,4 +1,5 @@
-package com.mvpsales.github.entities
+
+package com.mvpsales.github.domain
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -29,7 +30,7 @@ data class ArticleSource(
 ): Parcelable
 
 fun ArticleNews.formatPublishedDate(format: String): String? {
-    val fixedDate = publishedAt.replace("+00:00", "Z");
+    val fixedDate = publishedAt.replace("+00:00", "Z")
     val instant = Instant.parse(fixedDate).truncatedTo(ChronoUnit.MILLIS)
     val date = Date.from(instant)
     val dateFormatterTo = SimpleDateFormat(format, Locale.US)

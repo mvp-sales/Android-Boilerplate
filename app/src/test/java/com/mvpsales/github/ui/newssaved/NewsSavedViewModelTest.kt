@@ -1,7 +1,7 @@
 package com.mvpsales.github.ui.newssaved
 
 import app.cash.turbine.test
-import com.mvpsales.github.entities.ArticleNews
+import com.mvpsales.github.domain.ArticleNews
 import com.mvpsales.github.repository.NewsRepository
 import com.mvpsales.github.utils.DispatcherHelper
 import io.mockk.coEvery

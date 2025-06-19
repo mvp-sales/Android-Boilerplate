@@ -5,8 +5,8 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.mvpsales.github.entities.ArticleNews
-import com.mvpsales.github.entities.ArticleSource
+import com.mvpsales.github.domain.ArticleNews
+import com.mvpsales.github.domain.ArticleSource
 
 @Entity(indices = [Index(value = ["url"], unique = true)])
 data class ArticleNewsEntity(

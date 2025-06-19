@@ -9,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.mvpsales.github.api.response.ArticleNewsDto
-import com.mvpsales.github.entities.ArticleNews
+import com.mvpsales.github.domain.ArticleNews
 import com.mvpsales.github.ui.newsdetail.NewsDetailScreen
 import com.mvpsales.github.ui.newslist.NewsListScreen
 import com.mvpsales.github.ui.newssaved.NewsSavedScreen

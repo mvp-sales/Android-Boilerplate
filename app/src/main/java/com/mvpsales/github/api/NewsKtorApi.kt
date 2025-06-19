@@ -15,6 +15,7 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
 interface NewsKtorApi {

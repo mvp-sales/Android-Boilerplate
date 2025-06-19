@@ -1,4 +1,4 @@
-package com.mvpsales.github.entities
+package com.mvpsales.github.domain
 
 data class GenericError(
     val message: String

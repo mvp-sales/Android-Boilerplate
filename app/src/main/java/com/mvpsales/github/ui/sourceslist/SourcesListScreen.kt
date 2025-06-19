@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,8 +39,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mvpsales.github.entities.NewsSource
-import com.mvpsales.github.entities.getLanguageCountryNames
+import com.mvpsales.github.domain.NewsSource
+import com.mvpsales.github.domain.getLanguageCountryNames
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,7 +85,13 @@ fun SourcesListScreen(
                         items(state.sources) { source ->
                             SourceContent(
                                 source,
-                                onNavigateToNewsList
+                                onNavigateToNewsList,
+                                onAddSourceToFavourites = {
+                                    viewModel.addFavouriteSource(it)
+                                },
+                                onRemoveSourceFromFavourites = {
+                                    viewModel.removeFavouriteSource(it)
+                                }
                             )
                         }
                     }
@@ -105,7 +113,9 @@ fun SourcesListScreen(
 @Composable
 fun SourceContent(
     source: NewsSource,
-    onNavigateToNewsList: (NewsSource) -> Unit
+    onNavigateToNewsList: (NewsSource) -> Unit,
+    onAddSourceToFavourites: (NewsSource) -> Unit,
+    onRemoveSourceFromFavourites: (NewsSource) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -118,10 +128,31 @@ fun SourceContent(
             .border(BorderStroke(2.dp, Color.DarkGray), shape = RoundedCornerShape(8.dp))
             .padding(16.dp)
     ) {
-        Text(
-            text = source.name,
-            style = MaterialTheme.typography.headlineSmall
-        )
+        Row {
+            Text(
+                modifier = Modifier.weight(1f)
+                    .align(Alignment.CenterVertically),
+                text = source.name,
+                style = MaterialTheme.typography.headlineSmall
+            )
+            IconButton(
+                modifier = Modifier.align(Alignment.Top),
+                onClick = {
+                    if (source.favourite) {
+                        onRemoveSourceFromFavourites(source)
+                    } else {
+                        onAddSourceToFavourites(source)
+                    }
+                }
+            ) {
+                val icon = if (source.favourite) {
+                    Icons.Filled.Favorite
+                } else {
+                    Icons.Filled.FavoriteBorder
+                }
+                Icon(icon, "favourite", tint = Color.Red)
+            }
+        }
         val uriHandler = LocalUriHandler.current
         Text(
             modifier = Modifier.clickable {
@@ -169,8 +200,11 @@ fun SourceContentPreview() {
             url = "https://abcnews.go.com",
             category = "general",
             language = "en",
-            country = "us"
+            country = "us",
+            favourite = true
         ),
-        onNavigateToNewsList = {}
+        onNavigateToNewsList = {},
+        onAddSourceToFavourites = {},
+        onRemoveSourceFromFavourites = {}
     )
 }

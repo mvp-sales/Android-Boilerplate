@@ -1,6 +1,6 @@
 package com.mvpsales.github.api.response
 
-import com.mvpsales.github.entities.NewsSource
+import com.mvpsales.github.domain.NewsSource
 
 @kotlinx.serialization.Serializable
 data class NewsSourceDto(
@@ -14,5 +14,5 @@ data class NewsSourceDto(
 )
 
 fun NewsSourceDto.toEntity() = NewsSource(
-    id, name, description, url, category, language, country
+    id, name, description, url, category, language, country, false
 )
