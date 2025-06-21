@@ -22,8 +22,7 @@ import kotlinx.coroutines.flow.map
 
 interface NewsRepository {
 
-    suspend fun getEverything(searchNewsQuery: SearchNewsQuery): Flow<Result<NewsPage, GenericError>>
-    suspend fun getTopHeadlines(searchNewsQuery: SearchNewsQuery): Flow<Result<NewsPage, GenericError>>
+    suspend fun getNews(searchNewsQuery: SearchNewsQuery): Flow<Result<NewsPage, GenericError>>
     suspend fun getSavedArticles(): Flow<List<ArticleNews>>
     suspend fun saveArticle(article: ArticleNews)
     suspend fun deleteArticle(articleUrl: String)
@@ -35,31 +34,10 @@ class NewsRepositoryImpl(
     private val newsKtorApi: NewsKtorApi
 ) : NewsRepository {
 
-    override suspend fun getEverything(searchNewsQuery: SearchNewsQuery) =
+    override suspend fun getNews(searchNewsQuery: SearchNewsQuery) =
         newsKtorApi.getNews(
             GetNewsRequest(
-                searchType = SearchType.EVERYTHING,
-                query = searchNewsQuery.searchTerm,
-                sources = searchNewsQuery.sources,
-                page = searchNewsQuery.page
-            )
-        ).map { result ->
-            result.mapEither(
-                success = {
-                    NewsPage(
-                        articles = it.articles.map { it.toEntity() },
-                        totalResults = it.totalResults,
-                        page = searchNewsQuery.page
-                    )
-                },
-                failure = { GenericError(it.message) }
-            )
-        }
-
-    override suspend fun getTopHeadlines(searchNewsQuery: SearchNewsQuery) =
-        newsKtorApi.getNews(
-            GetNewsRequest(
-                searchType = SearchType.HEADLINES,
+                searchType = searchNewsQuery.searchType,
                 query = searchNewsQuery.searchTerm,
                 sources = searchNewsQuery.sources,
                 page = searchNewsQuery.page

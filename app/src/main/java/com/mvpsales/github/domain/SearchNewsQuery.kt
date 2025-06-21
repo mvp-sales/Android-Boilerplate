@@ -5,6 +5,7 @@ enum class SearchType {
 }
 
 data class SearchNewsQuery(
+    val searchType: SearchType = SearchType.EVERYTHING,
     val searchTerm: String = "",
     val sources: List<String> = emptyList(),
     val page: Int = 1

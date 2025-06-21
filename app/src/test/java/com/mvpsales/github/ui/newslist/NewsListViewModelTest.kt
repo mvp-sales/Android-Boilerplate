@@ -41,8 +41,7 @@ class NewsListViewModelTest {
             totalResults = 1
         )
 
-        coEvery { repository.getEverything(any()) } returns flowOf(Ok(newsPage))
-        coEvery { repository.getTopHeadlines(any()) } returns flowOf(Ok(newsPage))
+        coEvery { repository.getNews(any()) } returns flowOf(Ok(newsPage))
 
         viewModel.uiState.test {
             Assertions.assertEquals(

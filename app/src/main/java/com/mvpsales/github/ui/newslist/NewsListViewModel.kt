@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mvpsales.github.domain.ArticleNews
 import com.mvpsales.github.domain.GenericError
 import com.mvpsales.github.domain.SearchNewsQuery
+import com.mvpsales.github.domain.SearchType
 import com.mvpsales.github.repository.NewsRepository
 import com.mvpsales.github.utils.DispatcherHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,18 +43,17 @@ class NewsListViewModel(
 
         val lastLoadedPage = (_uiState.value as? UiState.Loaded)?.lastLoadedPage ?: 0
         val query = SearchNewsQuery(
+            searchType = when (newsType) {
+                NewsListType.ALL_NEWS -> SearchType.EVERYTHING
+                NewsListType.HEADLINES -> SearchType.HEADLINES
+            },
             searchTerm = searchTerm,
             sources = if (sourceId.isEmpty()) emptyList() else listOf(sourceId),
             page = lastLoadedPage + 1
         )
 
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
-            val resultFlow = when (newsType) {
-                NewsListType.ALL_NEWS -> newsRepository.getEverything(query)
-                NewsListType.HEADLINES -> newsRepository.getTopHeadlines(query)
-            }
-
-            resultFlow.collectLatest { result ->
+            newsRepository.getNews(query).collectLatest { result ->
                 _uiState.update { currentState ->
                     when {
                         result.isOk -> {

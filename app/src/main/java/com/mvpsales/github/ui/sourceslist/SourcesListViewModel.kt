@@ -40,36 +40,50 @@ class SourcesListViewModel(
 
     fun addFavouriteSource(source: NewsSource) {
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
-            val currentSources = (_uiState.value as UiState.Loaded).sources
-            _uiState.update { UiState.Loading }
             sourcesRepository.addFavouriteSource(source)
-            _uiState.update {
-                val updatedSources = currentSources.map { sourceIt ->
+            _uiState.update { curState ->
+                val updatedSources = (curState as UiState.Loaded).sources.map { sourceIt ->
                     if (sourceIt.id == source.id) source.copy(favourite = true) else sourceIt
                 }
-                UiState.Loaded(updatedSources)
+                curState.copy(sources = updatedSources)
             }
         }
     }
 
     fun removeFavouriteSource(source: NewsSource) {
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
-            val currentSources = (_uiState.value as UiState.Loaded).sources
-            _uiState.update { UiState.Loading }
             sourcesRepository.removeSourceFromFavourite(source)
-            _uiState.update {
-                val updatedSources = currentSources.map { sourceIt ->
+            _uiState.update { curState ->
+                val updatedSources = (curState as UiState.Loaded).sources.map { sourceIt ->
                     if (sourceIt.id == source.id) source.copy(favourite = false) else sourceIt
                 }
-                UiState.Loaded(updatedSources)
+                curState.copy(sources = updatedSources)
             }
+        }
+    }
+
+    fun toggleShowOnlyFavourites() {
+        _uiState.update { curState ->
+            if (curState !is UiState.Loaded) {
+                return
+            }
+            curState.copy(showOnlyFavourites = !curState.showOnlyFavourites)
         }
     }
 
     sealed class UiState {
         data object Initial: UiState()
         data object Loading: UiState()
-        data class Loaded(val sources: List<NewsSource>): UiState()
+        data class Loaded(val sources: List<NewsSource>, val showOnlyFavourites: Boolean = false): UiState() {
+            val sourcesToShow: List<NewsSource>
+                get() {
+                    return if (showOnlyFavourites) {
+                        sources.filter { it.favourite }
+                    } else {
+                        sources
+                    }
+                }
+        }
         data class Error(val error: GenericError): UiState()
     }
 }
