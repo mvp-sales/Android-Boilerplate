@@ -105,10 +105,6 @@ fun NewsListScreen(
                                     expandedMenu = false
                                 }
                             )
-                            DropdownMenuItem(
-                                text = { Text("Apply filters") },
-                                onClick = { /* Do something... */ }
-                            )
                         }
                     }
                 }

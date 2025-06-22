@@ -12,10 +12,12 @@ import com.mvpsales.github.domain.GenericError
 import com.mvpsales.github.domain.NewsSource
 import com.mvpsales.github.domain.SearchSourcesQuery
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 interface SourcesRepository {
     suspend fun getHeadlinesSources(query: SearchSourcesQuery): Flow<Result<List<NewsSource>, GenericError>>
+    suspend fun getFavouriteSources(): List<NewsSource>
     suspend fun addFavouriteSource(source: NewsSource)
     suspend fun removeSourceFromFavourite(source: NewsSource)
 }
@@ -41,6 +43,9 @@ class SourcesRepositoryImpl(
                 }
             )
         }
+
+    override suspend fun getFavouriteSources(): List<NewsSource> =
+        newsSourcesDao.getAll().map { it.toDomain() }
 
     override suspend fun addFavouriteSource(source: NewsSource) =
         newsSourcesDao.insertAll(source.toDb())

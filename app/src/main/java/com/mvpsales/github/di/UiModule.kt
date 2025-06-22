@@ -11,8 +11,8 @@ import org.koin.dsl.module
 
 val uiModule = module {
     single<DispatcherHelper> { DispatcherHelperImpl() }
-    viewModel { (searchTerm: String, sourceId: String) ->
-        NewsListViewModel(searchTerm, sourceId, get(), get())
+    viewModel { (searchTerm: String, sourceId: String, onlyFavouriteSources: Boolean) ->
+        NewsListViewModel(searchTerm, sourceId, onlyFavouriteSources, get(), get(), get())
     }
     viewModel { NewsDetailViewModel(get(), get()) }
     viewModel { NewsSavedViewModel(get(), get()) }

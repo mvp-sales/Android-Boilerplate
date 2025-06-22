@@ -24,7 +24,7 @@ import org.koin.core.parameter.parametersOf
 object NewsSearch
 
 @Serializable
-data class NewsList(val searchTerm: String, val sourceId: String)
+data class NewsList(val searchTerm: String, val sourceId: String, val searchOnlyFavouriteSources: Boolean)
 
 @Serializable
 data class NewsDetail(val articleAsJsonString: String)
@@ -40,8 +40,8 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
     NavHost(navController = navController, startDestination = NewsSearch, modifier = modifier) {
         composable<NewsSearch> {
             NewsSearchScreen(
-                onNavigateToNewsList = { searchTerm ->
-                    navController.navigate(route = NewsList(searchTerm, ""))
+                onNavigateToNewsList = { searchTerm, searchFavouriteSourcesOnly ->
+                    navController.navigate(route = NewsList(searchTerm, "", searchFavouriteSourcesOnly))
                 },
                 onNavigateToSavedNewsList = {
                     navController.navigate(route = NewsSaved)
@@ -76,7 +76,7 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
             SourcesListScreen(
                 viewModel = koinViewModel(),
                 onNavigateToNewsList = { source ->
-                    navController.navigate(route = NewsList("", source.id))
+                    navController.navigate(route = NewsList("", source.id, false))
                 },
                 onNavigateBack = { navController.popBackStack() }
             )
@@ -85,7 +85,7 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier) {
             val route: NewsList = backStackEntry.toRoute()
             NewsListScreen(
                 viewModel = koinViewModel(
-                    parameters = { parametersOf(route.searchTerm, route.sourceId) },
+                    parameters = { parametersOf(route.searchTerm, route.sourceId, route.searchOnlyFavouriteSources) },
                     key = "latestKey"
                 ),
                 onNavigateToNewsDetail = { article ->

@@ -5,6 +5,7 @@ import com.github.michaelbull.result.Ok
 import com.mvpsales.github.domain.ArticleNews
 import com.mvpsales.github.domain.NewsPage
 import com.mvpsales.github.repository.NewsRepository
+import com.mvpsales.github.repository.SourcesRepository
 import com.mvpsales.github.utils.DispatcherHelper
 import io.mockk.coEvery
 import io.mockk.every
@@ -17,18 +18,20 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import javax.xml.transform.Source
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class NewsListViewModelTest {
     private lateinit var viewModel: NewsListViewModel
     private val testDispatcher = UnconfinedTestDispatcher()
     private val repository = mockk<NewsRepository>()
+    private val sourcesRepository = mockk<SourcesRepository>()
     private val dispatcherHelper = mockk<DispatcherHelper>()
 
     @BeforeEach
     fun setup() {
         every { dispatcherHelper.ioDispatcher() } returns testDispatcher
-        viewModel = NewsListViewModel("", "", repository, dispatcherHelper)
+        viewModel = NewsListViewModel("", "", false, repository, sourcesRepository, dispatcherHelper)
     }
 
     @ParameterizedTest(name = "should emit Loading and Loaded states from Initial state")

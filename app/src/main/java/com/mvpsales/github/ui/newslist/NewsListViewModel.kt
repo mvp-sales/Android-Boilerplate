@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvpsales.github.domain.ArticleNews
 import com.mvpsales.github.domain.GenericError
+import com.mvpsales.github.domain.NewsSource
 import com.mvpsales.github.domain.SearchNewsQuery
 import com.mvpsales.github.domain.SearchType
 import com.mvpsales.github.repository.NewsRepository
+import com.mvpsales.github.repository.SourcesRepository
 import com.mvpsales.github.utils.DispatcherHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +20,9 @@ import kotlinx.coroutines.launch
 class NewsListViewModel(
     private val searchTerm: String,
     private val sourceId: String,
+    private val searchOnlyFromFavouriteSources: Boolean,
     private val newsRepository: NewsRepository,
+    private val sourcesRepository: SourcesRepository,
     private val dispatcherHelper: DispatcherHelper
 ) : ViewModel() {
 
@@ -41,18 +45,27 @@ class NewsListViewModel(
             }
         }
 
-        val lastLoadedPage = (_uiState.value as? UiState.Loaded)?.lastLoadedPage ?: 0
-        val query = SearchNewsQuery(
-            searchType = when (newsType) {
-                NewsListType.ALL_NEWS -> SearchType.EVERYTHING
-                NewsListType.HEADLINES -> SearchType.HEADLINES
-            },
-            searchTerm = searchTerm,
-            sources = if (sourceId.isEmpty()) emptyList() else listOf(sourceId),
-            page = lastLoadedPage + 1
-        )
-
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
+            val sources = when {
+                sourceId.isNotEmpty() -> listOf(sourceId)
+                searchOnlyFromFavouriteSources -> {
+                    val favouritesSources = sourcesRepository.getFavouriteSources()
+                    favouritesSources.map { it.id }
+                }
+                else -> emptyList<String>()
+            }
+
+            val lastLoadedPage = (_uiState.value as? UiState.Loaded)?.lastLoadedPage ?: 0
+            val query = SearchNewsQuery(
+                searchType = when (newsType) {
+                    NewsListType.ALL_NEWS -> SearchType.EVERYTHING
+                    NewsListType.HEADLINES -> SearchType.HEADLINES
+                },
+                searchTerm = searchTerm,
+                sources = sources,
+                page = lastLoadedPage + 1
+            )
+
             newsRepository.getNews(query).collectLatest { result ->
                 _uiState.update { currentState ->
                     when {
