@@ -29,7 +29,7 @@ data class ArticleSource(
     val name: String
 ): Parcelable
 
-fun ArticleNews.formatPublishedDate(format: String): String? {
+fun ArticleNews.formatPublishedDate(format: String): String {
     val fixedDate = publishedAt.replace("+00:00", "Z")
     val instant = Instant.parse(fixedDate).truncatedTo(ChronoUnit.MILLIS)
     val date = Date.from(instant)

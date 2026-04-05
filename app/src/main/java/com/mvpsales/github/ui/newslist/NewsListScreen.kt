@@ -39,11 +39,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BrushPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.mvpsales.github.R
 import com.mvpsales.github.domain.ArticleNews
 import com.mvpsales.github.domain.ArticleSource
 import com.mvpsales.github.domain.formatPublishedDate
@@ -69,7 +71,7 @@ fun NewsListScreen(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
-                title = { Text(" news results") },
+                title = { Text(stringResource(R.string.news_list_results_title)) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "backIcon")
@@ -90,8 +92,8 @@ fun NewsListScreen(
                             DropdownMenuItem(
                                 text = {
                                     val menuItemTitle = if (newsLoadedType == NewsListType.ALL_NEWS) {
-                                        "Show headlines"
-                                    } else "Show all news"
+                                        stringResource(R.string.news_list_show_headlines)
+                                    } else stringResource(R.string.news_list_show_all)
                                     Text(menuItemTitle)
                                 },
                                 onClick = {
@@ -134,7 +136,7 @@ fun NewsListScreen(
                                                 viewModel.fetchNews(newsLoadedType)
                                             }
                                         ) {
-                                            Text("Load More")
+                                            Text(stringResource(R.string.news_list_load_more))
                                         }
                                     }
                                 }

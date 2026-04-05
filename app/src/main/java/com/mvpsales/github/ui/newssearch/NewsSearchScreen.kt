@@ -24,9 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mvpsales.github.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,7 +37,7 @@ fun NewsSearchScreen(
     onNavigateToSavedNewsList: () -> Unit,
     onNavigateToSourcesList: () -> Unit
 ) {
-    var searchTerm = remember { mutableStateOf(TextFieldValue("")) }
+    val searchTerm = remember { mutableStateOf(TextFieldValue("")) }
     var showOnlyFromFavouriteSources by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -45,7 +47,7 @@ fun NewsSearchScreen(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
-                title = { Text("News Search") }
+                title = { Text(stringResource(R.string.news_search_title)) }
             )
         }
     ) { padding ->
@@ -60,7 +62,7 @@ fun NewsSearchScreen(
                     .fillMaxWidth()
             ) {
                 Text(
-                    "Search news by term",
+                    stringResource(R.string.news_search_by_term),
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 OutlinedTextField(
@@ -69,7 +71,7 @@ fun NewsSearchScreen(
                     onValueChange = { newTerm ->
                         searchTerm.value = newTerm
                     },
-                    placeholder = { Text("Search") }
+                    placeholder = { Text(stringResource(R.string.news_search_placeholder)) }
                 )
                 Row {
                     Checkbox(
@@ -79,7 +81,7 @@ fun NewsSearchScreen(
                         }
                     )
                     Text(
-                        "Show only from favourite sources",
+                        stringResource(R.string.news_search_only_favourite),
                         modifier = Modifier.align(alignment = Alignment.CenterVertically)
                     )
                 }
@@ -89,21 +91,21 @@ fun NewsSearchScreen(
                         onNavigateToNewsList(searchTerm.value.text, showOnlyFromFavouriteSources)
                     },
                     content = {
-                        Text("Search news")
+                        Text(stringResource(R.string.news_search_button))
                     }
                 )
                 Button(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = onNavigateToSavedNewsList,
                     content = {
-                        Text("Saved news list")
+                        Text(stringResource(R.string.news_search_saved_list_button))
                     }
                 )
                 Button(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = onNavigateToSourcesList,
                     content = {
-                        Text("Show sources list")
+                        Text(stringResource(R.string.news_search_sources_list_button))
                     }
                 )
             }

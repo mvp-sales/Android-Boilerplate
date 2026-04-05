@@ -42,10 +42,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mvpsales.github.R
 import com.mvpsales.github.domain.NewsSource
 import com.mvpsales.github.domain.getLanguageCountryNames
 import com.mvpsales.github.ui.newslist.NewsListType
@@ -77,7 +79,7 @@ fun SourcesListScreen(
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             titleContentColor = MaterialTheme.colorScheme.primary,
                         ),
-                        title = { Text("Sources list") },
+                        title = { Text(stringResource(R.string.sources_list_title)) },
                         navigationIcon = {
                             IconButton(onClick = onNavigateBack) {
                                 Icon(Icons.AutoMirrored.Filled.ArrowBack, "backIcon")
@@ -98,8 +100,8 @@ fun SourcesListScreen(
                                     DropdownMenuItem(
                                         text = {
                                             val menuItemTitle = if (state.showOnlyFavourites) {
-                                                "All sources"
-                                            } else "Favourite sources"
+                                                stringResource(R.string.sources_list_all)
+                                            } else stringResource(R.string.sources_list_favourites)
                                             Text(menuItemTitle)
                                         },
                                         onClick = {
@@ -204,7 +206,7 @@ fun SourceContent(
         )
         Text(
             modifier = Modifier.padding(vertical = 4.dp),
-            text = "Category: ${source.category}",
+            text = stringResource(R.string.source_category_label, source.category),
             style = MaterialTheme.typography.labelSmall
         )
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -217,7 +219,7 @@ fun SourceContent(
             )
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Language: $language",
+                text = stringResource(R.string.source_language_label, language),
                 textAlign = TextAlign.End,
                 style = MaterialTheme.typography.labelSmall
             )

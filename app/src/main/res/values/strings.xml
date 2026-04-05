@@ -1,4 +1,41 @@
 <resources>
     <string name="app_name">Android-Boilerplate</string>
     <string name="news_search_appbar_title">News Search</string>
+    <string name="back_icon_content_description">Back</string>
+    <string name="more_options_content_description">More options</string>
+    <string name="favourite_icon_content_description">Favourite</string>
+
+    <!-- News Detail -->
+    <string name="news_detail_title">News from %1$s</string>
+    <string name="news_detail_no_content">No content available</string>
+    <string name="news_detail_unknown_author">Unknown author</string>
+    <string name="news_detail_published_at">Published at %1$s</string>
+    <string name="news_detail_read_more">Read more on %1$s</string>
+    <string name="news_detail_remove_from_saved">Remove from saved</string>
+    <string name="news_detail_save_for_later">Save for later</string>
+
+    <!-- News Saved -->
+    <string name="news_saved_title">Saved news</string>
+
+    <!-- News Search -->
+    <string name="news_search_title">News Search</string>
+    <string name="news_search_by_term">Search news by term</string>
+    <string name="news_search_placeholder">Search</string>
+    <string name="news_search_only_favourite">Show only from favourite sources</string>
+    <string name="news_search_button">Search news</string>
+    <string name="news_search_saved_list_button">Saved news list</string>
+    <string name="news_search_sources_list_button">Show sources list</string>
+
+    <!-- News List -->
+    <string name="news_list_results_title"> news results</string>
+    <string name="news_list_show_headlines">Show headlines</string>
+    <string name="news_list_show_all">Show all news</string>
+    <string name="news_list_load_more">Load More</string>
+
+    <!-- Sources List -->
+    <string name="sources_list_title">Sources list</string>
+    <string name="sources_list_all">All sources</string>
+    <string name="sources_list_favourites">Favourite sources</string>
+    <string name="source_category_label">Category: %1$s</string>
+    <string name="source_language_label">Language: %1$s</string>
 </resources>

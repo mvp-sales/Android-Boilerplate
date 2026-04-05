@@ -27,11 +27,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BrushPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.mvpsales.github.R
 import com.mvpsales.github.domain.ArticleNews
 import com.mvpsales.github.domain.ArticleSource
 import com.mvpsales.github.domain.formatPublishedDate
@@ -122,7 +124,7 @@ private fun NewsDetail(
                 style = MaterialTheme.typography.labelMedium
             )
             Text(
-                article.content ?: "No content available",
+                article.content ?: stringResource(R.string.news_detail_no_content),
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 16.dp)
                     .align(Alignment.CenterHorizontally),
@@ -130,13 +132,13 @@ private fun NewsDetail(
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(
-                article.author ?: "Unknown author",
+                article.author ?: stringResource(R.string.news_detail_unknown_author),
                 modifier = Modifier
                     .padding(horizontal = 16.dp),
                 style = MaterialTheme.typography.labelMedium
             )
             Text(
-                "Published at ${article.formatPublishedDate("dd MMM yyyy")}",
+                stringResource(R.string.news_detail_published_at, article.formatPublishedDate("dd MMM yyyy")),
                 modifier = Modifier
                     .padding(horizontal = 16.dp),
                 style = MaterialTheme.typography.labelMedium
@@ -145,7 +147,7 @@ private fun NewsDetail(
             Button(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
                 content = {
-                    Text("Read more on ${article.source.name}")
+                    Text(stringResource(R.string.news_detail_read_more, article.source.name))
                 },
                 onClick = {
                     uriHandler.openUri(article.url)
@@ -155,7 +157,7 @@ private fun NewsDetail(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                 content = {
                     Text(
-                        if (isArticleSaved) "Remove from saved" else "Save for later"
+                        stringResource(if (isArticleSaved) R.string.news_detail_remove_from_saved else R.string.news_detail_save_for_later)
                     )
                 },
                 onClick = {
