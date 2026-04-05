@@ -8,22 +8,17 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 appcompat = "1.7.1"
 material = "1.13.0"
-hilt = "2.59.2"
-hiltNavCompose = "1.3.0"
 room = "2.8.4"
 coroutines = "1.10.2"
-retrofit = "3.0.0"
-retrofit-kotlinx-serialization-converter = "3.0.0"
 navigation = "2.9.7"
-navigation-plugin = "2.0.21"
 kotlin-serialization = "1.10.0"
 ksp = "2.3.6"
-compose-bom = "2024.12.01"
+compose-bom = "2026.03.01"
 compose-activity = "1.13.0"
 compose-viewmodels = "2.10.0"
 coil = "3.4.0"
 ktor-version = "3.4.2"
-koin-bom = "x.x.x"
+koin-bom = "4.2.0"
 koin-version = "4.2.0"
 koin-android-version = "x.x.x"
 kotlin-result = "2.3.1"
@@ -35,7 +30,7 @@ lifecycleViewmodelNav3 = "2.11.0-alpha03"
 kotlinSerializationNav = "2.3.20"
 kotlinxSerializationCore = "1.10.0"
 material3AdaptiveNav3 = "1.3.0-alpha09"
-concurrentFutures = "1.2.0"
+concurrentFutures = "1.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,9 +40,6 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-hilt = { group = "com.google.dagger", name="hilt-android", version.ref="hilt" }
-hilt-compiler = { group = "com.google.dagger", name="hilt-compiler", version.ref="hilt" }
-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref="hiltNavCompose"}
 room-runtime = { group = "androidx.room", name="room-runtime", version.ref="room" }
 room-compiler = { group = "androidx.room", name="room-compiler", version.ref="room" }
 room-ktx = { group = "androidx.room", name="room-ktx", version.ref="room" }
@@ -56,11 +48,6 @@ room-paging = { group = "androidx.room", name="room-paging", version.ref="room" 
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref="coroutines" }
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref="coroutines" }
 coroutines-testing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref="coroutines" }
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref="retrofit" }
-retrofit-kotlinx-serialization-converter = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref="retrofit-kotlinx-serialization-converter"}
-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref="navigation" }
-navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref="navigation" }
-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref="navigation" }
 kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref="kotlin-serialization" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref="compose-bom" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
@@ -84,10 +71,11 @@ ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-jso
 ktor-client-contentnegotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref="ktor-version" }
 ktor-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref="ktor-version" }
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
-koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin-version" }
-koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-android-version" }
-koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-version" }
-koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation", version.ref = "koin-version" }
+koin-core = { module = "io.insert-koin:koin-core" }
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose" }
+koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation" }
+koin-compose-navigation3 = { module = "io.insert-koin:koin-compose-navigation3" }
 kotlin-result = { group = "com.michael-bull.kotlin-result", name = "kotlin-result", version.ref="kotlin-result"}
 mockk = { group = "io.mockk", name = "mockk", version.ref="mockk" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref="turbine" }
@@ -104,14 +92,11 @@ androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecy
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
 androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "material3AdaptiveNav3" }
 
-androidx-concurrent-futures = { group = "androidx.concurrent", name = "concurrent-futures", version.ref = "concurrentFutures" }
+#androidx-concurrent-futures = { group = "androidx.concurrent", name = "concurrent-futures", version.ref = "concurrentFutures" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-navigation = { id = "plugin.serialization", version.ref = "navigation-plugin" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-kapt = { id = "kotlin-kapt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 # Optional plugins

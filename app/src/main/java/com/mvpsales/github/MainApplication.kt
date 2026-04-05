@@ -6,12 +6,10 @@ import com.mvpsales.github.di.commonModule
 import com.mvpsales.github.di.dbModule
 import com.mvpsales.github.di.networkModule
 import com.mvpsales.github.di.uiModule
-import dagger.hilt.android.HiltAndroidApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-@HiltAndroidApp
 class MainApplication: Application() {
     override fun onCreate() {
         super.onCreate()

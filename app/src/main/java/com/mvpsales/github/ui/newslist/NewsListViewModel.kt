@@ -6,7 +6,6 @@ import com.github.michaelbull.result.annotation.UnsafeResultErrorAccess
 import com.github.michaelbull.result.annotation.UnsafeResultValueAccess
 import com.mvpsales.github.domain.ArticleNews
 import com.mvpsales.github.domain.GenericError
-import com.mvpsales.github.domain.NewsSource
 import com.mvpsales.github.domain.SearchNewsQuery
 import com.mvpsales.github.domain.SearchType
 import com.mvpsales.github.repository.NewsRepository
