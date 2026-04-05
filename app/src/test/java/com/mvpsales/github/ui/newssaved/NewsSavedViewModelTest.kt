@@ -7,14 +7,14 @@ import com.mvpsales.github.utils.DispatcherHelper
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class NewsSavedViewModelTest {
@@ -23,7 +23,7 @@ class NewsSavedViewModelTest {
     private val repository = mockk<NewsRepository>()
     private val dispatcherHelper = mockk<DispatcherHelper>()
 
-    @Before
+    @BeforeEach
     fun setup() {
         every { dispatcherHelper.ioDispatcher() } returns testDispatcher
         viewModel = NewsSavedViewModel(repository, dispatcherHelper)

@@ -19,8 +19,6 @@ compose-viewmodels = "2.10.0"
 coil = "3.4.0"
 ktor-version = "3.4.2"
 koin-bom = "4.2.0"
-koin-version = "4.2.0"
-koin-android-version = "x.x.x"
 kotlin-result = "2.3.1"
 mockk = "1.14.9"
 turbine = "1.2.1"
@@ -30,7 +28,6 @@ lifecycleViewmodelNav3 = "2.11.0-alpha03"
 kotlinSerializationNav = "2.3.20"
 kotlinxSerializationCore = "1.10.0"
 material3AdaptiveNav3 = "1.3.0-alpha09"
-concurrentFutures = "1.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -82,6 +79,7 @@ turbine = { group = "app.cash.turbine", name = "turbine", version.ref="turbine" 
 junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref= "junit-jupiter" }
 junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref= "junit-jupiter" }
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref= "junit-jupiter" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junit-jupiter" }
 
 # Core Navigation 3 libraries
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
@@ -91,8 +89,6 @@ androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", vers
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
 androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "material3AdaptiveNav3" }
-
-#androidx-concurrent-futures = { group = "androidx.concurrent", name = "concurrent-futures", version.ref = "concurrentFutures" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

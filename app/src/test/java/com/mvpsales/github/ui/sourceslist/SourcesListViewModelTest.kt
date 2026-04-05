@@ -5,20 +5,19 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.mvpsales.github.domain.GenericError
 import com.mvpsales.github.domain.NewsSource
-import com.mvpsales.github.repository.NewsRepository
 import com.mvpsales.github.repository.SourcesRepository
 import com.mvpsales.github.utils.DispatcherHelper
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SourcesListViewModelTest {
@@ -27,7 +26,7 @@ class SourcesListViewModelTest {
     private val repository = mockk<SourcesRepository>()
     private val dispatcherHelper = mockk<DispatcherHelper>()
 
-    @Before
+    @BeforeEach
     fun setup() {
         every { dispatcherHelper.ioDispatcher() } returns testDispatcher
         viewModel = SourcesListViewModel(repository, dispatcherHelper)
