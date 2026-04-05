@@ -2,6 +2,8 @@ package com.mvpsales.github.ui.newslist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.michaelbull.result.annotation.UnsafeResultErrorAccess
+import com.github.michaelbull.result.annotation.UnsafeResultValueAccess
 import com.mvpsales.github.domain.ArticleNews
 import com.mvpsales.github.domain.GenericError
 import com.mvpsales.github.domain.NewsSource
@@ -29,6 +31,7 @@ class NewsListViewModel(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Initial)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
+    @OptIn(UnsafeResultValueAccess::class, UnsafeResultErrorAccess::class)
     fun fetchNews(newsType: NewsListType) {
         val currentState = _uiState.value
         if (currentState is UiState.Loading || currentState is UiState.Loaded && currentState.isLoadingMore) {

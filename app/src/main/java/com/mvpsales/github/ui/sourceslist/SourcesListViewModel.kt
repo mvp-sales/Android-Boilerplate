@@ -2,6 +2,8 @@ package com.mvpsales.github.ui.sourceslist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.michaelbull.result.annotation.UnsafeResultErrorAccess
+import com.github.michaelbull.result.annotation.UnsafeResultValueAccess
 import com.mvpsales.github.domain.GenericError
 import com.mvpsales.github.domain.NewsSource
 import com.mvpsales.github.domain.SearchSourcesQuery
@@ -23,6 +25,7 @@ class SourcesListViewModel(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Initial)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
+    @OptIn(UnsafeResultValueAccess::class, UnsafeResultErrorAccess::class)
     fun getSources() {
         viewModelScope.launch(dispatcherHelper.ioDispatcher()) {
             _uiState.update { UiState.Loading }
