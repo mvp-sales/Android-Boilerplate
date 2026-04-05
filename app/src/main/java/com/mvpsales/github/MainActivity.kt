@@ -33,7 +33,6 @@ class MainActivity: AppCompatActivity() {
         setContent {
             val navController = rememberNavController()
             Box(modifier = Modifier.fillMaxSize()) {
-                //AppNavGraph(navController, modifier = Modifier.fillMaxSize())
                 NewsApp(modifier = Modifier.fillMaxSize())
             }
             /*Scaffold(

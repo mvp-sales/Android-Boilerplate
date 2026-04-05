@@ -22,7 +22,6 @@ data object NewsSaved
 data object SourcesList
 data class NewsDetail(val article: ArticleNews)
 
-
 @Composable
 fun NewsApp(modifier: Modifier) {
     val backStack = remember { mutableStateListOf<Any>(NewsSearch) }
