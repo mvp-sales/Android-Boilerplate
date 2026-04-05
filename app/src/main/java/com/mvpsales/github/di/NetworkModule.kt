@@ -1,8 +1,8 @@
 package com.mvpsales.github.di
 
 import com.mvpsales.github.BuildConfig
-import com.mvpsales.github.api.NewsKtorApi
-import com.mvpsales.github.api.NewsKtorApiImpl
+import com.mvpsales.github.api.NewsApi
+import com.mvpsales.github.api.NewsApiImpl
 import com.mvpsales.github.utils.Constants
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
@@ -33,5 +33,5 @@ val networkModule = module {
             }
         }
     }
-    factory<NewsKtorApi> { NewsKtorApiImpl(get()) }
+    factory<NewsApi> { NewsApiImpl(get()) }
 }

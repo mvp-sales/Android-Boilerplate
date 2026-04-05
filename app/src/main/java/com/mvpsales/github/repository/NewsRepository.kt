@@ -2,8 +2,7 @@ package com.mvpsales.github.repository
 
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.mapEither
-import com.mvpsales.github.api.NewsKtorApi
-import com.mvpsales.github.api.request.GetHeadlinesSourcesRequest
+import com.mvpsales.github.api.NewsApi
 import com.mvpsales.github.api.request.GetNewsRequest
 import com.mvpsales.github.api.response.toEntity
 import com.mvpsales.github.db.ArticlesDao
@@ -12,10 +11,7 @@ import com.mvpsales.github.db.toEntity
 import com.mvpsales.github.domain.ArticleNews
 import com.mvpsales.github.domain.GenericError
 import com.mvpsales.github.domain.NewsPage
-import com.mvpsales.github.domain.NewsSource
 import com.mvpsales.github.domain.SearchNewsQuery
-import com.mvpsales.github.domain.SearchSourcesQuery
-import com.mvpsales.github.domain.SearchType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -31,11 +27,11 @@ interface NewsRepository {
 
 class NewsRepositoryImpl(
     private val articlesDao: ArticlesDao,
-    private val newsKtorApi: NewsKtorApi
+    private val newsApi: NewsApi
 ) : NewsRepository {
 
     override suspend fun getNews(searchNewsQuery: SearchNewsQuery) =
-        newsKtorApi.getNews(
+        newsApi.getNews(
             GetNewsRequest(
                 searchType = searchNewsQuery.searchType,
                 query = searchNewsQuery.searchTerm,
