@@ -27,7 +27,7 @@
     <string name="news_search_sources_list_button">Show sources list</string>
 
     <!-- News List -->
-    <string name="news_list_results_title"> news results</string>
+    <string name="news_list_results_title">%1$s news results</string>
     <string name="news_list_show_headlines">Show headlines</string>
     <string name="news_list_show_all">Show all news</string>
     <string name="news_list_load_more">Load More</string>

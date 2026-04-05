@@ -31,6 +31,11 @@ class NewsListViewModel(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Initial)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
+    val title: String
+        get() = searchTerm.ifEmpty {
+            sourceId
+        }
+
     @OptIn(UnsafeResultValueAccess::class, UnsafeResultErrorAccess::class)
     fun fetchNews(newsType: NewsListType) {
         val currentState = _uiState.value

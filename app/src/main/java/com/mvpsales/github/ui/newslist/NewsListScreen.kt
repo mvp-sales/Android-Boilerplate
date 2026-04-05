@@ -71,7 +71,7 @@ fun NewsListScreen(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
-                title = { Text(stringResource(R.string.news_list_results_title)) },
+                title = { Text(stringResource(R.string.news_list_results_title, viewModel.title)) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "backIcon")
